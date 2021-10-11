@@ -71,7 +71,7 @@ function undo() {
 
 /**
  * edit checked/unchecked placeholders in the file.
- * @param {string} extended_match - the extended keyword (includes #if and #endif) need to be replaced.
+ * @param {string} right_range - the extended keyword (includes #if and #endif) need to be replaced.
  * 
  */
 
@@ -103,77 +103,95 @@ function check_box(element) {
             while (ns) {
 
                 console.log("found");
-                let match_range = window.getSelection().getRangeAt(0).cloneRange();
-                let extended_match = window.getSelection().getRangeAt(0).cloneRange();
+                let left_range = window.getSelection().getRangeAt(0).cloneRange();
+                let right_range = window.getSelection().getRangeAt(0).cloneRange();
+                let original_range = window.getSelection().getRangeAt(0).cloneRange();
+
+				let extended_begin_node;
+				let extended_begin_focus;
+				let extended_end_node;
+				let extended_end_focus;
+				
                 if (window.getSelection().anchorOffset < 3) {
-                    const old_offset = window.getSelection().anchorOffset;
-                    console.log("no enough range "+ window.getSelection().anchorNode.toString());
-                    extended_match.setStart(window.getSelection().anchorNode.previousSibling, window.getSelection().anchorNode.previousSibling.length - 3 + old_offset);
+                    extended_begin_node = window.getSelection().anchorNode.previousSibling;
+					extended_begin_focus =window.getSelection().anchorNode.previousSibling.length+ window.getSelection().anchorOffset -3;
+					console.log("begin extended through focus " + extended_begin_node.data);
                 } else {
-                    console.log("enough range " + window.getSelection().anchorNode.toString());
-                    extended_match.setStart(window.getSelection().anchorNode, window.getSelection().anchorOffset - 3);
+
+
+                    extended_begin_node = window.getSelection().anchorNode;
+
+                    extended_begin_focus = window.getSelection().anchorOffset -3;
+					console.log("begin extended through focus " + extended_begin_node.data);
+
                 }
 				
-				if (window.getSelection().focusOffset < window.getSelection().focusNode.length) {
-					var extended_end_node = window.getSelection().focusNode;
-                    var extended_end_focus = window.getSelection().focusOffset +1;
-                    console.log("end extended through focus " );
+				if (window.getSelection().focusOffset == window.getSelection().focusNode.length ) {
+					extended_end_node = window.getSelection().focusNode.nextSibling;
+                    extended_end_focus = window.getSelection().focusNode.nextSibling.length-2;
+                    console.log("end extended through next node "  );
                     
                 } else {
-					var extended_end_node = window.getSelection().focusNode.nextSibling;
-                    var extended_end_focus = 1;
-                    console.log("end extended through node "  );
+					extended_end_node = window.getSelection().focusNode;
+                    extended_end_focus = window.getSelection().focusOffset +1;
+                    console.log("end extended through focus " + extended_end_node.data);
+				
+
                     
                 }
 				
-                const range_text = extended_match.toString();
-                const previous_cha = range_text.slice(2, 3);
-                console.log("previous_cha: " + previous_cha);
+				right_range.setEnd(extended_end_node, extended_end_focus);
+				left_range.setStart(extended_begin_node, extended_begin_focus);
+                const right_text = right_range.toString();
+                const right_cha = right_text.slice(-1);
+				console.log("right_text: " + right_text);
+				console.log("right_cha: " + right_cha);
+				
+				
+				const left_text = left_range.toString();
+                const left_cha = left_text.slice(2, 3);
+                console.log("left_text: " + left_text);
+                console.log("left_cha: " + left_cha);
 
-                window.find(" ");
-				match_range.setEnd(extended_end_node, extended_end_focus);
-				const range_text_2 = match_range.toString();
-				const end_cha = range_text_2.slice(-1);
-				if (end_cha == "|")
-				{
-				extended_match.setEnd(extended_end_node, extended_end_focus);
-				}else {}
-				console.log("selection is: " + extended_match);
-                console.log("extended full length: " + match_range)
-
-
-
-                if (previous_cha == "|" || previous_cha == "_") {
+                if (left_cha == "|" || left_cha == "_") {
                     window.find("#if", aBackwards = 1);
-                    extended_match.setStart(window.getSelection().anchorNode, window.getSelection().anchorOffset);
-                    console.log(" selection updated because \| : " + extended_match);
+                    left_range.setStart(window.getSelection().anchorNode, window.getSelection().anchorOffset);
+                    console.log(" selection updated because \| : " + right_range);
 
-                    match_mod(extended_match);
-                    match_range.detach();
-                } else if (previous_cha == "f") {
+                    match_mod(left_range);
+                    
+                } else if (left_cha == "f") {
+					if (right_cha == "|")
+				{
+				window.find(" ");
+				
+				left_range.setEnd(window.getSelection().focusNode, window.getSelection().focusOffset);
+				match_mod(left_range);
+                left_range.detach();
+				}else {                    
+				match_mod(left_range);
+                left_range.detach();}
 
-                    console.log("_____normal");
-                    console.log(" range unchanged");
-                    match_mod(extended_match);
-                    match_range.detach();
+   
 
-                } else if (previous_cha == "," || previous_cha == " ") {
+
+                } else if (left_cha == "," || left_cha == " ") {
                     console.log("!!!! replace match text");
-
-                    match_range.deleteContents();
-                    match_range.insertNode(document.createTextNode(name));
-                    match_range.detach();
+					
+                    original_range.deleteContents();
+                    original_range.insertNode(document.createTextNode(name));
+                    original_range.detach();
                 } else {
 
-                    console.log("_____normal");
-                    console.log("last character is: ", previous_cha);
-                    match_mod(extended_match);
-                    match_range.detach();
+                    console.log("_____other cases");
+                    console.log("last character is: ", right_cha);
+                    match_mod(left_range);
+                    left_range.detach();
                 }
 
                 //window.find("#endif");
 
-                match_range.detach();
+                left_range.detach();
                 ns = window.find(match_name, aWrapAround = 1);
             }
         } else if (document.body.createTextRange) //for ie etc.
@@ -203,62 +221,100 @@ function check_box(element) {
 
             while (ns) {
 
-                console.log("found");
-                let match_range = window.getSelection().getRangeAt(0).cloneRange();
-                let extended_match = window.getSelection().getRangeAt(0);
+                console.log("unchecked  found");
+                                console.log("found");
+                let left_range = window.getSelection().getRangeAt(0).cloneRange();
+                let right_range = window.getSelection().getRangeAt(0).cloneRange();
+                let original_range = window.getSelection().getRangeAt(0).cloneRange();
+
+				let extended_begin_node;
+				let extended_begin_focus;
+				let extended_end_node;
+				let extended_end_focus;
+				
                 if (window.getSelection().anchorOffset < 3) {
-                    const old_offset = window.getSelection().anchorOffset;
-                    console.log("no enough range, old offset is " +  old_offset);
-
-                    extended_match.setStart(window.getSelection().anchorNode.previousSibling, window.getSelection().anchorNode.previousSibling.length - 3 + old_offset);
+                    extended_begin_node = window.getSelection().anchorNode.previousSibling;
+					extended_begin_focus =window.getSelection().anchorNode.previousSibling.length+ window.getSelection().anchorOffset -3;
+					console.log("begin extended through focus " + extended_begin_node.data);
                 } else {
-                    console.log("enough range, offset is " + window.getSelection().anchorOffset);
-                    extended_match.setStart(window.getSelection().anchorNode, window.getSelection().anchorOffset - 3);
+
+
+                    extended_begin_node = window.getSelection().anchorNode;
+
+                    extended_begin_focus = window.getSelection().anchorOffset -3;
+					console.log("begin extended through focus " + extended_begin_node.data);
+
                 }
+				
+				if (window.getSelection().focusOffset == window.getSelection().focusNode.length ) {
+					extended_end_node = window.getSelection().focusNode.nextSibling;
+                    extended_end_focus = window.getSelection().focusNode.nextSibling.length-2;
+                    console.log("end extended through next node "  );
+                    
+                } else {
+					extended_end_node = window.getSelection().focusNode;
+                    extended_end_focus = window.getSelection().focusOffset +1;
+                    console.log("end extended through focus " + extended_end_node.data);
+				
 
-                console.log("selection is: " + extended_match)
+                    
+                }
+				
+				right_range.setEnd(extended_end_node, extended_end_focus);
+				left_range.setStart(extended_begin_node, extended_begin_focus);
+                const right_text = right_range.toString();
+                const right_cha = right_text.slice(-1);
+				console.log("right_text: " + right_text);
+				console.log("right_cha: " + right_cha);
+				
+				
+				const left_text = left_range.toString();
+                const left_cha = left_text.slice(2, 3);
+                console.log("left_text: " + left_text);
+                console.log("left_cha: " + left_cha);
 
-                window.find(" ");
-                match_range.setEnd(window.getSelection().anchorNode, window.getSelection().anchorOffset);
-
-                console.log("extended full length: " + extended_match)
-
-                const range_text = extended_match.toString();
-                const previous_cha = range_text.slice(2, 3)
-                    console.log("previous_cha: " + previous_cha);
-
-                if (previous_cha == "|" || previous_cha == "_") {
+                if (left_cha == "|" || left_cha == "_") {
                     window.find("#if", aBackwards = 1);
-                    match_range.setStart(window.getSelection().anchorNode, window.getSelection().anchorOffset);
-                    console.log(" selection updated because \| : " + extended_match);
+                    left_range.setStart(window.getSelection().anchorNode, window.getSelection().anchorOffset);
+                    console.log(" selection updated because \| : " + right_range);
 
-                    match_remove(extended_match);
-                    match_range.detach();
-                } else if (previous_cha == "f") {
-                    console.log("_____normal");
-                    console.log(" range unchanged");
-                    match_remove(extended_match);
-                    match_range.detach();
-                } else if (previous_cha == "," || previous_cha == " ") {
-                    console.log("!!!! removed match text");
+                     match_remove(left_range);
+                    
+                } else if (left_cha == "f") {
+					if (right_cha == "|")
+				{
+				window.find(" ");
+				
+				left_range.setEnd(window.getSelection().focusNode, window.getSelection().focusOffset);
+				 match_remove(left_range);
+                left_range.detach();
+				}else {                    
+				 match_remove(left_range);
+                left_range.detach();}
 
-                    match_range.deleteContents();
-                    match_range.detach();
+   
 
+
+                } else if (left_cha == "," || left_cha == " ") {
+                    console.log("!!!! replace match text");
+					
+                    original_range.deleteContents();
+                    
+                    original_range.detach();
                 } else {
 
-                    console.log("_____normal");
-                    console.log("last character is: ", previous_cha);
-                    match_remove(extended_match);
-                    match_range.detach();
+                    console.log("_____other cases");
+                    console.log("last character is: ", right_cha);
+                    match_remove(left_range);
+                    left_range.detach();
                 }
 
                 //window.find("#endif");
 
-
+                left_range.detach();
                 ns = window.find(match_name, aWrapAround = 1);
             }
-        } else if (document.body.createTextRange) //for ie etc.
+        }   else if (document.body.createTextRange) //for ie etc.
         {
             let range_if = document.body.createTextRange();
             while (range_if.findText(match_name)) {
@@ -272,14 +328,14 @@ function check_box(element) {
 
 /**
  * match a place holder and then modify it.
- * @param {string} extended_match - the extended keyword (includes #if and #endif) need to be replaced.
+ * @param {string} right_range - the extended keyword (includes #if and #endif) need to be replaced.
  * 
  */
 
-function match_mod(extended_match) {
-    const text_after_if = (extended_match.toString().slice(3));
+function match_mod(in_range) {
+    const text_after_if = (in_range.toString().slice(3));
     console.log("after_endif: " + text_after_if);
-    extended_match.deleteContents();
+    in_range.deleteContents();
 
     window.find("#endif" + text_after_if);
 
@@ -290,18 +346,18 @@ function match_mod(extended_match) {
 }
 /**
  * match a place holder and then remove it.
- * @param {string} extended_match - the extended keyword (includes #if and #endif) need to be removed.
+ * @param {string} right_range - the extended keyword (includes #if and #endif) need to be removed.
  * 
  */
-function match_remove(extended_match) {
-    const text_after_if = (extended_match.toString().slice(3));
+function match_remove(right_range) {
+    const text_after_if = (right_range.toString().slice(3));
     console.log("after_if: " + text_after_if);
 
     window.find("#endif" + text_after_if);
 
-    extended_match.setEnd(window.getSelection().focusNode, window.getSelection().focusOffset);
-    extended_match.deleteContents();
-    extended_match.detach();
+    right_range.setEnd(window.getSelection().focusNode, window.getSelection().focusOffset);
+    right_range.deleteContents();
+    right_range.detach();
 
 }
 /**
