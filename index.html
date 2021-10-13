@@ -172,7 +172,7 @@ function check_box(element) {
 				
 				
 				if (if_cha == "|" ) {
-							if (window.getSelection().anchorOffset < 13) 
+							if (window.getSelection().anchorOffset < 13 && window.getSelection().anchorNode.previousSibling !== undefined) 
 							{
 							extended_begin_node = window.getSelection().anchorNode.previousSibling;
 							extended_begin_focus =window.getSelection().anchorNode.previousSibling.length+ window.getSelection().anchorOffset -13;
