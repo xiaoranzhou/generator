@@ -84,7 +84,7 @@ function check_box(element) {
     const class_name = element.classList;
     console.log(class_name[0]);
     const checked = document.querySelectorAll(`.${class_name[0]}:checked`);
-    //const checked = document.querySelectorAll('.nd-q:checked');
+
     //console.log([...checked]);
     const unchecked = document.querySelectorAll(`.${class_name[0]}:not(:checked)`);
     //console.log([...unchecked]);
@@ -497,7 +497,7 @@ function find_replace(before, after) {
     border: 1px solid #EFEFEF;" id="interface" >
 <nav>
   <div class="nav nav-tabs justify-content-center h6" id="nav-tab" role="tablist" >
-    <button class="nav-link active" id="nav-project_name-tab" data-bs-toggle="tab" data-bs-target="#nav-project_name" type="button" role="tab" aria-controls="nav-project_name" aria-selected="true">1. Project name</button>
+    <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General project information</button>
     <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" data-bs-target="#nav-data_type" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
     <button class="nav-link" id="nav-data_volumn-tab" data-bs-toggle="tab" data-bs-target="#nav-data_volumn" type="button" role="tab" aria-controls="nav-data_volumn" aria-selected="false">3. Data volume</button>
 	    <button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" data-bs-target="#nav-relevant_standards" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Relavent standards</button>
@@ -507,8 +507,8 @@ function find_replace(before, after) {
   </div>
 </nav>
 <div class="tab-content align-items-center h6" id="nav-tabContent" >
-  <div class="tab-pane fade show active " id="nav-project_name" role="tabpanel" aria-labelledby="nav-project_name-tab">
-  <p >1. Give the project name or acronym to be used:</p>
+  <div class="tab-pane fade show active " id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
+  <p >1.1 Give the project name or acronym to be used:</p>
 	<form >
 		<label for="name is">The project name is:</label>
 		<input type="text"
@@ -523,9 +523,84 @@ function find_replace(before, after) {
 			       onclick="undo();">
   
 	</form>
+	 <p >1.2 Chose some information</p>
+<div class="form-data_type form-check-inline">
+  <input class="form-check-input q_1st" type="checkbox" value="1" id="check_protect" >
+  <label class="form-check-label" for="check_protect">
+    is the data protected
+  </label>
+    <input class="form-check-input q_1st" type="checkbox" value="1" id="check_eu" >
+  <label class="form-check-label" for="check_eu">
+    is it eu project
+  </label>
+</div> 
+	<input type="button" id="form-check-input"
+			       value="submit "
+			       onclick="check_box(this)" class="q_1st"> 
+				   <input type="button"
+			       value="undo"
+			       onclick="undo();">
+
+<p>5. Are you going to use DataPLANT ARC</p>
+	<div class="form-check form-switch form-check-inline">
+	 <input class="form-check-input  q_5th_a" type="checkbox" id="check_dataplant" data-bs-toggle="collapse" data-bs-target="#q_5th_a" aria-expanded="false" aria-controls="q_5th_a" checked >
+  <label class="form-check-label" for="check_dataplant">Yes I will use DataPLANT</label>
+</div>
+<input type="button" id="form-check-input"
+			       value="submit data type"
+			       onclick="check_box(this)" class="q_5th_a"> 
+				   <input type="button"
+			       value="undo"
+			       onclick="undo();">
+
+<div class="collapse" id="q_5th_a">
+
+    <p>5.a Where will you submit your data as endpoints? (no #if in text)</p>
+	
+	ENA, GEO, NCBI, genbank, pride, proteomexchange, zenodo, dataDyrad
+	<div class="form-data_type form-check-inline">
+  <input class="form-check-input q_5th_b" type="checkbox" value="1" id="check_ena" >
+  <label class="form-check-label" for="check_ena">
+    ENA
+  </label>
+</div> 
+<div class="form-data_type form-check-inline">
+  <input class="form-check-input q_5th_b" type="checkbox" value="2" id="check_geo" checked>
+  <label class="form-check-label" for="check_geo">
+    GEO
+  </label>
+</div> 
+<div class="form-data_type form-check-inline">
+  <input class="form-check-input q_5th_b" type="checkbox" value="3" id="check_NCBI" checked>
+  <label class="form-check-label" for="check_NCBI">
+    NCBI
+  </label>
+</div>  
   
-  
-  </div>
+<div class="form-data_type  form-check-inline">
+  <input class="form-check-input q_5th_b" type="checkbox" value="4" id="check_genbank" checked>
+  <label class="form-check-label" for="check_genbank">
+    genbank
+  </label>
+</div> 
+	  </div>
+	  
+	  	  <p>7. Is it a EU project?</p>
+
+<div class="form-check form-switch form-check-inline">
+	 <input class="form-check-input  q_7th_a" type="checkbox" id="check_eu" data-bs-toggle="collapse" data-bs-target="#q7_1" aria-expanded="false" aria-controls="q7_1" checked >
+  <label class="form-check-label" for="check_eu">is it a EU project?</label>
+</div>
+<input type="button" id="form-check-input"
+			       value="submit "
+			       onclick="check_box(this)" class="q_7th_a"> 
+				   <input type="button"
+			       value="undo"
+			       onclick="undo();">
+	</div>
+
+ 
+ 
  <div class="tab-pane fade  align-items-center" id="nav-data_type" role="tabpanel" aria-labelledby="nav-data_type-tab">
   <p>2. What kind of data do you handle:</p>
   <div class="form-data_type form-check-inline">
@@ -666,50 +741,10 @@ function find_replace(before, after) {
    </div>
     
 	<div class="tab-pane fade  align-items-center" id="nav-dataplant" role="tabpanel" aria-labelledby="nav-dataplant-tab">
-	<p>5. Are you going to use DataPLANT ARC</p>
-	<div class="form-check form-switch form-check-inline">
-	 <input class="form-check-input  q_5th_a" type="checkbox" id="check_dataplant" data-bs-toggle="collapse" data-bs-target="#q_5th_a" aria-expanded="false" aria-controls="q_5th_a" checked >
-  <label class="form-check-label" for="check_dataplant">Yes I will use DataPLANT</label>
-</div>
-<input type="button" id="form-check-input"
-			       value="submit data type"
-			       onclick="check_box(this)" class="q_5th_a"> 
-				   <input type="button"
-			       value="undo"
-			       onclick="undo();">
-<div class="collapse" id="q_5th_a">
-
-    <p>5.a Where will you submit your data as endpoints? (no #if in text)</p>
 	
-	ENA, GEO, NCBI, genbank, pride, proteomexchange, zenodo, dataDyrad
-	<div class="form-data_type form-check-inline">
-  <input class="form-check-input q_5th_b" type="checkbox" value="1" id="check_ena" >
-  <label class="form-check-label" for="check_ena">
-    ENA
-  </label>
-</div> 
-<div class="form-data_type form-check-inline">
-  <input class="form-check-input q_5th_b" type="checkbox" value="2" id="check_geo" checked>
-  <label class="form-check-label" for="check_geo">
-    GEO
-  </label>
-</div> 
-<div class="form-data_type form-check-inline">
-  <input class="form-check-input q_5th_b" type="checkbox" value="3" id="check_NCBI" checked>
-  <label class="form-check-label" for="check_NCBI">
-    NCBI
-  </label>
-</div>  
-  
-<div class="form-data_type  form-check-inline">
-  <input class="form-check-input q_5th_b" type="checkbox" value="4" id="check_genbank" checked>
-  <label class="form-check-label" for="check_genbank">
-    genbank
-  </label>
-</div> 
 
 </div>
-	 </div>
+	
 	 
 	 <div class="tab-pane fade  align-items-center" id="nav-other_standards" role="tabpanel" aria-labelledby="nav-other_standards-tab">
 	 <p>6.1 Will you adhere to any high level metadata submission standards?</p>
@@ -742,18 +777,7 @@ function find_replace(before, after) {
 </div>
 	
 	  <div class="tab-pane fade  align-items-center" id="nav-eu" role="tabpanel" aria-labelledby="nav-eu-tab">
-	  <p>7. Is it a EU project?</p>
 
-<div class="form-check form-switch form-check-inline">
-	 <input class="form-check-input  q_7th_a" type="checkbox" id="check_eu" data-bs-toggle="collapse" data-bs-target="#q7_1" aria-expanded="false" aria-controls="q7_1" checked >
-  <label class="form-check-label" for="check_eu">is it a EU project?</label>
-</div>
-<input type="button" id="form-check-input"
-			       value="submit "
-			       onclick="check_box(this)" class="q_7th_a"> 
-				   <input type="button"
-			       value="undo"
-			       onclick="undo();">
 
 
 	  </div>
