@@ -51,7 +51,13 @@ Missing:
 8. X \#issuewarning 
 9. X $_DATAOFFICER RENAME project name to general project information and add it there 
 
+
 X RENAME project name to general project information and merge 5. use data plant in there
 RENAME project name to general project information and merge 7. EU in there
 MERGE 4 relevant standard and 6 other standardsv and use 6 as a subsection in there first
 
+Last 4 placeholders to remove
+$_PROJECTAIM
+$_PHENOTPIC
+$GENETIC
+\#if$_PARTNERS
