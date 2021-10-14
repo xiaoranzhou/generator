@@ -41,12 +41,17 @@ Although some questions and keywords are mismatched, see next sections.
 
 ### Missing or mismatched questions and keywords.
 Missing:
-1. $_PROTECT 
-2. $_UPDATE 
-3. $_VISUALIZATION 
-4. $_STUDYOBJECT
-5. $_PREVIOUSPROJECTS 
-6. $_INDUSTRY 
-7. $_PROPRIETARY 
+1. $_PROTECT RENAME project name to general project information and add it there 
+2. $_UPDATE RENAME project name to general project information and add it there 
+3. $_VISUALIZATION Add section Data Analysis
+4. $_STUDYOBJECT  RENAME project name to general project information and add it there 
+5. $_PREVIOUSPROJECTS RENAME project name to general project information and add it there 
+6. $_INDUSTRY  RENAME project name to general project information and add it there 
+7. $_PROPRIETARY RENAME project name to general project information and add it there 
 8. \#issuewarning 
-9. $_DATAOFFICER
+9. $_DATAOFFICER RENAME project name to general project information and add it there 
+
+RENAME project name to general project information and merge 5. use data plant in there
+RENAME project name to general project information and merge 7. EU in there
+MERGE 4 relevant standard and 6 other standardsv and use 6 as a subsection in there first
+
