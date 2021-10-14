@@ -224,7 +224,35 @@ function check_box(element) {
                     original_range.deleteContents();
                     original_range.insertNode(document.createTextNode(name));
                     original_range.detach();
-                } else {
+                } else if (if_cha == "!" ) {
+				if (window.getSelection().anchorOffset < 4 && window.getSelection().anchorNode.previousSibling !== undefined) 
+							{
+							extended_begin_node = window.getSelection().anchorNode.previousSibling;
+							extended_begin_focus =window.getSelection().anchorNode.previousSibling.length+ window.getSelection().anchorOffset -4;
+							console.log("begin extended through focus " + extended_begin_node);
+							
+							} else {
+
+
+							extended_begin_node = window.getSelection().anchorNode;
+
+							extended_begin_focus = window.getSelection().anchorOffset -4;
+							console.log("begin extended through node " + extended_begin_node.data);
+
+							}
+							
+							left_range.setStart(extended_begin_node, extended_begin_focus);
+							const left_text = left_range.toString();
+
+							console.log("left_text with <!>: " + left_text);
+							match_remove(left_range);
+
+
+                } else 
+				
+				
+				
+				{
 
                     console.log("_____other cases");
                     console.log("last character is: ", right_cha);
@@ -371,7 +399,31 @@ function check_box(element) {
                     original_range.deleteContents();
 
                     original_range.detach();
-                } else {
+                } else if (if_cha == "!" ) {
+				if (window.getSelection().anchorOffset < 4 && window.getSelection().anchorNode.previousSibling !== undefined) 
+							{
+							extended_begin_node = window.getSelection().anchorNode.previousSibling;
+							extended_begin_focus =window.getSelection().anchorNode.previousSibling.length+ window.getSelection().anchorOffset -4;
+							console.log("begin extended through focus " + extended_begin_node);
+							
+							} else {
+
+
+							extended_begin_node = window.getSelection().anchorNode;
+
+							extended_begin_focus = window.getSelection().anchorOffset -4;
+							console.log("begin extended through node " + extended_begin_node.data);
+
+							}
+							
+							left_range.setStart(extended_begin_node, extended_begin_focus);
+							const left_text = left_range.toString();
+
+							console.log("left_text with <!>: " + left_text);
+							match_mod(left_range);
+
+
+                }else {
 
                     console.log("_____other cases");
                     console.log("last character is: ", right_cha);
@@ -492,68 +544,125 @@ function find_replace(before, after) {
 						
 
 		</script>			
-<body style="width:100%; height:auto; margin:0px; padding:0px "  >
-  <div style="width:100%; height:auto;  padding:5px; margin-bottom:0px;
-    border: 1px solid #EFEFEF;" id="interface" >
+ <body style="width:100%; height:auto; margin:0px; padding:0px "  >
+
+<div class="container-fluid main_container" >
+<div class="row"> 
+<div class="col-sm-4" style="height:auto;  "  id="interface" >
 <nav>
-  <div class="nav nav-tabs justify-content-center h6" id="nav-tab" role="tablist" >
-    <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General project information</button>
-    <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" data-bs-target="#nav-data_type" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
-    <button class="nav-link" id="nav-data_volumn-tab" data-bs-toggle="tab" data-bs-target="#nav-data_volumn" type="button" role="tab" aria-controls="nav-data_volumn" aria-selected="false">3. Data volume</button>
-	    <button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" data-bs-target="#nav-relevant_standards" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Relavent standards</button>
-		    <button class="nav-link" id="nav-dataplant-tab" data-bs-toggle="tab" data-bs-target="#nav-dataplant" type="button" role="tab" aria-controls="nav-dataplant" aria-selected="false">5. Use DataPLANT?</button>
-			    <button class="nav-link" id="nav-other_standards-tab" data-bs-toggle="tab" data-bs-target="#nav-other_standards" type="button" role="tab" aria-controls="nav-other_standards" aria-selected="false">6. Other standards</button>
-				    <button class="nav-link" id="nav-eu-tab" data-bs-toggle="tab" data-bs-target="#nav-eu" type="button" role="tab" aria-controls="nav-eu" aria-selected="false">7. Europe project</button>
+  <div class="nav nav-tabs   h6" id="nav-tab" role="tablist" >
+    <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General project information</button>
+    <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" data-bs-target="#nav-data_type" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
+    <button class="nav-link" id="nav-data_volumn-tab" data-bs-toggle="tab" data-bs-target="#nav-data_volumn" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_volumn" aria-selected="false">3. Data volume</button>
+	    <button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" data-bs-target="#nav-relevant_standards" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Relavent standards</button>
+<button class="nav-link" id="nav-nav-data_analysis-tab" data-bs-toggle="tab" data-bs-target="#nav-data_analysis" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_analysis" aria-selected="false">5. Data Analysis</button>
+
+				    
   </div>
 </nav>
 <div class="tab-content align-items-center h6" id="nav-tabContent" >
   <div class="tab-pane fade show active " id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
   <p >1.1 Give the project name or acronym to be used:</p>
 	<form >
-		<label for="name is">The project name is:</label>
+		<label for="project_name">The project name is:</label>
 		<input type="text"
 		       id="project_name"
 		       name="$_PROJECT"
 		       placeholder="give your project name here">
-			<input type="button"
+			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this);">
-				   <input type="button"
+				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
   
 	</form>
-	 <p >1.2 Chose some information</p>
-<div class="form-data_type form-check-inline">
+	
+	  <p >1.2 Give the object to be studied:</p>
+	<form >
+		<label for="study_object">The study object is:</label>
+		<input type="text"
+		       id="study_object"
+		       name="$_STUDYOBJECT"
+		       placeholder="study object here">
+			<input class="btn btn-primary btn-sm" type="button"
+			       value="replace"
+			       onclick="replace(this);">
+				   <input class="btn btn-secondary btn-sm" type="button"
+			       value="undo"
+			       onclick="undo();">
+  
+	</form>
+	
+	<p >1.3 Give the data officer name:</p>
+	<form >
+		<label for="dataofficer">The data officer name is:</label>
+		<input type="text"
+		       id="dataofficer"
+		       name="$_dataofficer"
+		       placeholder="dataofficer here">
+			<input class="btn btn-primary btn-sm" type="button"
+			       value="replace"
+			       onclick="replace(this);">
+				   <input class="btn btn-secondary btn-sm" type="button"
+			       value="undo"
+			       onclick="undo();">
+  
+	</form>
+	
+	 <p >1.4 Chose some additional information</p>
+<div class="form-data_type form-check-inline ">
   <input class="form-check-input q_1st" type="checkbox" value="1" id="check_protect" >
   <label class="form-check-label" for="check_protect">
-    is the data protected
+    The data is protected
   </label>
-    <input class="form-check-input q_1st" type="checkbox" value="1" id="check_eu" >
-  <label class="form-check-label" for="check_eu">
-    is it eu project
+  <br>
+    <input class="form-check-input q_1st" type="checkbox" value="2" id="check_dataplant"  data-bs-toggle="collapse" data-bs-target="#q_5th_a" aria-expanded="false" aria-controls="q_5th_a" checked>
+  <label class="form-check-label" for="check_dataplant">
+    Yes! I will use dataplant.
   </label>
+
+  <br>
+  <input class="form-check-input q_1st" type="checkbox" value="3" id="check_update" data-bs-toggle="collapse" data-bs-target="#q_update_month" aria-expanded="false" aria-controls="q_update_month"  >
+  <label class="form-check-label" for="check_update">
+    This project will be updated
+  </label>
+  <br>
+  
+
+  <input class="form-check-input q_1st" type="checkbox" value="4" id="check_previousprojects" 
+  data-bs-toggle="collapse" data-bs-target="#q_previousprojects" aria-expanded="false" aria-controls="q_previousprojects"  >
+  <label class="form-check-label" for="check_previousprojects">
+    This project has previous projects.
+  </label>
+
+  <br>
+    <input class="form-check-input q_1st" type="checkbox" value="5" id="check_industry" >
+  <label class="form-check-label" for="check_industry">
+    This is an industry project.
+  </label>
+    <br>
+  
+  <input class="form-check-input q_1st" type="checkbox" value="6" id="check_proprietary" 
+  data-bs-toggle="collapse" data-bs-target="#q_proprietary" aria-expanded="false" aria-controls="q_proprietary"  >
+  <label class="form-check-label" for="check_proprietary">
+    This project use proprietary software.
+  </label>
+
+  
 </div> 
-	<input type="button" id="form-check-input"
+<br>
+	<input class="btn btn-primary btn-sm" type="button" id="form-check-input"
 			       value="submit "
 			       onclick="check_box(this)" class="q_1st"> 
-				   <input type="button"
+				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
 
-<p>5. Are you going to use DataPLANT ARC</p>
-	<div class="form-check form-switch form-check-inline">
-	 <input class="form-check-input  q_5th_a" type="checkbox" id="check_dataplant" data-bs-toggle="collapse" data-bs-target="#q_5th_a" aria-expanded="false" aria-controls="q_5th_a" checked >
-  <label class="form-check-label" for="check_dataplant">Yes I will use DataPLANT</label>
-</div>
-<input type="button" id="form-check-input"
-			       value="submit data type"
-			       onclick="check_box(this)" class="q_5th_a"> 
-				   <input type="button"
-			       value="undo"
-			       onclick="undo();">
 
-<div class="collapse" id="q_5th_a">
+
+
+  <div class="collapse" id="q_5th_a">
 
     <p>5.a Where will you submit your data as endpoints? (no #if in text)</p>
 	
@@ -584,19 +693,72 @@ function find_replace(before, after) {
   </label>
 </div> 
 	  </div>
-	  
-	  	  <p>7. Is it a EU project?</p>
 
-<div class="form-check form-switch form-check-inline">
-	 <input class="form-check-input  q_7th_a" type="checkbox" id="check_eu" data-bs-toggle="collapse" data-bs-target="#q7_1" aria-expanded="false" aria-controls="q7_1" checked >
-  <label class="form-check-label" for="check_eu">is it a EU project?</label>
-</div>
-<input type="button" id="form-check-input"
-			       value="submit "
-			       onclick="check_box(this)" class="q_7th_a"> 
-				   <input type="button"
+
+
+
+<div class="collapse" id="q_update_month">
+  <br>
+<form >
+
+		<label for="q_update_month">at which month will your project updated?</label>
+		<input type="text"
+		       id="update_month"
+		       name="$_UPDATEMONTH"
+		       placeholder="month of update">
+			  <input class="btn btn-primary btn-sm" type="button"
+			       value="replace"
+			       onclick="replace(this);" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
+				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
+			   </form>
+			    <br>
+</div>
+
+
+  <div class="collapse" id="q_previousprojects">
+  <br>
+<form >
+		<label for="previousprojects">The name of your previous project is:</label>
+		<input type="text"
+		       id="previousprojects"
+		       name="$_PREVIOUSPROJECTS"
+		       placeholder="previous project here">
+			<input class="btn btn-primary btn-sm" type="button"
+			       value="replace"
+			       onclick="replace(this);" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
+				   <input class="btn btn-secondary btn-sm" type="button"
+			       value="undo"
+			       onclick="undo();">
+  
+	</form>
+</div>
+
+
+  <div class="collapse" id="q_proprietary">
+  <br>
+<form >
+		<label for="proprietary">The name of your proprietary software is:</label>
+		
+		<input type="text"
+		       id="proprietary"
+		       name="$_proprietary"
+		       placeholder=" proprietary software ">
+			<input class="btn btn-primary btn-sm" type="button"
+			       value="replace"
+			       onclick="replace(this);" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
+				   <input class="btn btn-secondary btn-sm" type="button"
+			       value="undo"
+			       onclick="undo();">
+  
+	</form>
+</div>
+
+
+
+	  
+
 	</div>
 
  
@@ -671,10 +833,10 @@ function find_replace(before, after) {
 
 
 <br>
-<input type="button" id="check_box1"
+<input class="btn btn-primary btn-sm" type="button" id="check_box1"
 			       value="submit data type"
 			       onclick="check_box(this)" class="q_2nd"> 
-				   <input type="button"
+				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
   </div>
@@ -687,10 +849,10 @@ function find_replace(before, after) {
 		       id="raw_data"
 		       name="$_RAWDATA"
 		       placeholder="give your raw data volume here">
-			<input type="button"
+			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this);">
-				   <input type="button"
+				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
 				   <br>
@@ -700,10 +862,10 @@ function find_replace(before, after) {
 		       id="derived_data"
 		       name="$_DERIVEDDATA"
 		       placeholder="give your derived data volume here">
-			<input type="button"
+			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this);">
-				   <input type="button"
+				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
   
@@ -726,28 +888,7 @@ function find_replace(before, after) {
     MinSeqE
   </label>
 </div> 
-	
-	
-	</div>
-   
-   
-   
-   
-   <div class="tab-pane fade  align-items-center" id="nav-q5" role="tabpanel" aria-labelledby="nav-data_type-tab">
-
-   
-   
-   
-   </div>
-    
-	<div class="tab-pane fade  align-items-center" id="nav-dataplant" role="tabpanel" aria-labelledby="nav-dataplant-tab">
-	
-
-</div>
-	
-	 
-	 <div class="tab-pane fade  align-items-center" id="nav-other_standards" role="tabpanel" aria-labelledby="nav-other_standards-tab">
-	 <p>6.1 Will you adhere to any high level metadata submission standards?</p>
+	 <p>4.1 Will you adhere to any high level metadata submission standards?</p>
 <div class="form-data_type form-check-inline">
   <input class="form-check-input q_5th" type="checkbox" value="1" id="check_dublin_core" checked>
   <label class="form-check-label" for="check_dublin_core">
@@ -760,7 +901,7 @@ function find_replace(before, after) {
     MARC 21
   </label>
 </div> 	 
-	 <p>6.2 When will you make your data public?</p> 
+	 <p>4.2 When will you make your data public?</p> 
 
 	<div class="form-check form-switch form-check-inline">
 	 <input class="form-check-input  " type="checkbox" id="publish_early" data-bs-toggle="collapse" data-bs-target="#q6_2" aria-expanded="false" aria-controls="q6_2" checked >
@@ -773,15 +914,40 @@ function find_replace(before, after) {
 	
 
 </div> 
-
-</div>
 	
-	  <div class="tab-pane fade  align-items-center" id="nav-eu" role="tabpanel" aria-labelledby="nav-eu-tab">
+	</div>
+   
+   
+     <div class="tab-pane fade  align-items-center" id="nav-data_analysis" role="tabpanel" aria-labelledby="nav-data_analysis-tab">
+	 <br>
+	 	<input type="text"
+		       id="raw_data"
+		       name="$_VISUALIZATION"
+		       placeholder=" " class="d-none" value= " " >
+			<input class="btn btn-primary btn-sm" type="button"
+			       value="press if you don't need visualization"
+			       onclick="replace(this);">
+				   <input class="btn btn-secondary btn-sm" type="button"
+			       value="undo"
+			       onclick="undo();">
+  
+	</form>
+	 </div>
 
+	
+	 
 
-
-	  </div>
+	
+	  
 	   </div>
+	   
+	   <div class="alert alert-danger" role="alert">
+	   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+  </svg>
+  some Metabolomics partners considers Metabolights not an accepted standard <a href="#" class="alert-link">issue warning</a>. issue warning
+  <button class="btn btn-primary btn-sm" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 </div>
 
 	
@@ -792,13 +958,12 @@ function find_replace(before, after) {
 
 
 	  
-		
-		</div>
 
-    <div id="editorContainer"  style="width:100%; height:100vh; position: fixed;  padding:5px; ">
+
+    <div id="editorContainer" class="col-xl-8"  style="height:100vh; position: left;  padding:5px; ">
     </div>
-	
-	
+	</div>
+	</div>
 	
 	<script src="bootstrap.bundle.min.js" type="text/javascript" charset="utf-8"> </script>
     <script src="renderer.js"></script>
