@@ -30,34 +30,9 @@ Although some questions and keywords are mismatched, see next sections.
 1. replace any $_KEYWORDS in the text. It avoids replacing $_KEYWORDSEXTENDED or $_KEYWORDS1|KEYWORDS2 or #if_$KEYWORDS. This is wraped in find_replace function.
 2. By using check boxes, it removes #if_ and #endif_ around the $_KEYWORDS in the checked boxes and removes all text in the unchecked keywords. Then replace the selected keywords. It can also handle | symbol. The "!" is not implemented. 
 3. Automatic expose hidden sub-question in question 5., if user does not use DataPLANT, then she/he need to answer question 5a.
-  
 
 
-### Known issues:
-1. Bug (fixed) in question 2, where the user need to click the white space near the checkbox before submit a input. Might be caused by changing focus of the "window.find()"  function. Tried several debug possibilities, one way to debug this one is to refresh the object, but brings bug 3.(:P), others are not working. 
-2. Bug of undo button. Clicking the undo button will cause document not manually editable. However the automatic modification is not affected.
-3. Compatibility is only tested in chrome. In theory IE support is not hard to add.
-
-
-### Missing or mismatched questions and keywords.
-Missing:
-1. X $_PROTECT RENAME project name to general project information and add it there 
-2. X $_UPDATE RENAME project name to general project information and add it there 
-3. X $_VISUALIZATION Add section Data Analysis
-4. X $_STUDYOBJECT  RENAME project name to general project information and add it there 
-5. X $_PREVIOUSPROJECTS RENAME project name to general project information and add it there 
-6. X $_INDUSTRY  RENAME project name to general project information and add it there 
-7. X $_PROPRIETARY RENAME project name to general project information and add it there 
-8. X \#issuewarning 
-9. X $_DATAOFFICER RENAME project name to general project information and add it there 
-
-
-X RENAME project name to general project information and merge 5. use data plant in there
-RENAME project name to general project information and merge 7. EU in there
-MERGE 4 relevant standard and 6 other standardsv and use 6 as a subsection in there first
-
-Last 4 placeholders to remove
-$_PROJECTAIM
-$_PHENOTPIC
-$GENETIC
-\#if$_PARTNERS
+### Missing functions and TODO.
+TODO: 
+- undo button
+- \#issuewarning warnings should only be triggered when needed
