@@ -13,12 +13,17 @@
 	<link href="favicon.ico" rel="icon">
   </head>
   <script>
-  var saved_url;
+	var saved_q = { };
+	var saved_url;
     var editor = null,
         editorOptions,
 		loadedFilename;
-        
-
+    var questionJSONString=JSON.stringify(saved_q); 
+	function save_questions ( ) {
+	
+	
+	}
+//FileSaver.saveAs(file);
     /*jslint emptyblock: true*/
     /**
      * @return {undefined}
@@ -253,24 +258,36 @@ function undo() {
 }
 
 
+function getOption(this_element  ) {
+	const class_name = this_element.classList;
+    console.log(class_name[0]);
+    const checked = document.querySelectorAll(`.${class_name[0]}:checked`);
 
+    //console.log([...checked]);
+    const unchecked = document.querySelectorAll(`.${class_name[0]}:not(:checked)`);
+	let singleOption = { class_name: {checked:checked , unchecked: unchecked}};
+	try 
+	{saved_q.push(singleOption);}
+	catch (e)
+	{ alert("you have submitted, please use undo if you want to chaneg your input");}
+	checkbox(singleOption);
+	
+}
 /**
  * edit checked/unchecked placeholders in the file.
  * @param {string} right_range - the extended keyword (includes #if and #endif) need to be replaced.
  * 
  */
 
-function check_box(element) {
+function checkbox(options) {
+	
 	const selection = window.getSelection();
 	selection.removeAllRanges();
-    save_undo();
+	const class_name = options.key;
+	console.log(class_name);
+	const checked = options.value
 
-    const class_name = element.classList;
-    console.log(class_name[0]);
-    const checked = document.querySelectorAll(`.${class_name[0]}:checked`);
-
-    //console.log([...checked]);
-    const unchecked = document.querySelectorAll(`.${class_name[0]}:not(:checked)`);
+    
     //console.log([...unchecked]);
     for (let i = 0; i < checked.length; i++) {
         let check_box_item = checked[i].id;
@@ -866,7 +883,7 @@ function find_replace(before, after) {
 <br>
 	<input class="q_1st btn btn-primary btn-sm" type="button" id="form-check-input"
 			       value="submit "
-			       onclick="check_box(this)" > 
+			       onclick="getOption(this)" > 
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
@@ -1060,7 +1077,7 @@ function find_replace(before, after) {
 <br>
 <input class="q_2nd btn btn-primary btn-sm" type="button" id="check_box1"
 			       value="submit data type"
-			       onclick="check_box(this)" class=> 
+			       onclick="getOption(this)" class=> 
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo();">
