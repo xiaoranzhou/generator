@@ -13,13 +13,23 @@
 	<link href="favicon.ico" rel="icon">
   </head>
   <script>
-	var saved_q = { };
-	var saved_url;
-    var editor = null,
+	var saved_a = {"replace": {}, "checkbox": {}},
+	    saved_url,
+        editor = null,
         editorOptions,
 		loadedFilename;
-    var questionJSONString=JSON.stringify(saved_q); 
-	function save_questions ( ) {
+    var  saved_status = [];
+
+	var undo_doc;
+	var refresh_doc;
+	const prefix = '$_';
+	function save_json()  {
+	aJSONString=JSON.stringify(saved_a);
+	const blob = new Blob([aJSONString], {type: "application/json"});
+	saveAs(blob);
+	
+	}
+		function laod_answers ( ) {
 	
 	
 	}
@@ -201,75 +211,99 @@
     }
     
 Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
-var  saved_status = [];
 
-var undo_doc;
-var refresh_doc;
-const prefix = '$_';
 
-function save_backup(before_name, callback) {
-    let re = new RegExp("\\" + before_name, 'gi');
 
-    if (callback(re)) {
-        //console.log(callback(re));
-        let odt_doc = document.getElementById("webodfeditor-canvascontainer1");
-        undo_doc = odt_doc.cloneNode(true);
 
-    }
-}
 
-function save_undo() {
-    let odt_doc = document.getElementById("webodfeditor-canvascontainer1");
-    refresh_doc = odt_doc.cloneNode(true);
-    //odt_doc.parentNode.replaceChild(refresh_doc, odt_doc);
-    if (refresh_doc == undo_doc || undo_doc == null) {
-        undo_doc = odt_doc.cloneNode(true);
-    }
-}
-
-function if_exist(re) {
-    const match = document.getElementById("webodfeditor-canvascontainer1").innerHTML.match(re);
-    let have_found = false;
-    console.log(match);
-    try {
-
-        have_found = match.length > 1;
-
-    } catch (e) {
-
-        have_found = false;
-    }
-    return have_found;
-}
 
 function replace(child) {
 
     const before = child.previousElementSibling.name;
-    save_backup(before, if_exist);
+     
     const after = child.previousElementSibling.value;
     console.log(before, after);
-    find_replace(before, after);
+	saved_a["replace"][before] =  after; 
+    let singleOption = {};
+	singleOption[before] =  after; 
+	
+    find_replace(singleOption);
 }
 
-function undo() {
-
-    const odt_doc = document.getElementById("webodfeditor-canvascontainer1");
-    odt_doc.parentNode.replaceChild(undo_doc, odt_doc);
+function undo(this_element) {
+	
+    const previous_element = this_element.previousElementSibling;
+	console.log(previous_element.previousElementSibling.getAttribute('name'));
+	if (previous_element.getAttribute('onclick') == "replace(this)")
+	{
+	try {delete saved_a["replace"][previous_element.previousElementSibling.getAttribute('name')];}
+	catch (e) { console.log("no such content, already undo"); }
+	
+	}
+	else
+	{
+	try {delete saved_a["checkbox"][previous_element.classList[0]];}
+	catch (e) { console.log("no such content, already undo") ;}
+	}
+	
+	console.log("json is " + JSON.stringify(saved_a));
 }
+
+async function reload_doc (){
+	editor.openDocumentFromUrl("DMP1.odt", startEditing);
+}
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
+
+
+function reload_all () {
+editor.openDocumentFromUrl("DMP1.odt", startEditing);
+setTimeout(() => {  reload_answers(); }, 2000);
+  // do things after the DOM loads partially
+  
+
+
+}
+
+
+function reload_answers() {
+
+    
+	for (let answers in saved_a["replace"]) { 
+	let placeholder = {};
+	placeholder[answers] = saved_a["replace"][answers]
+	console.log();
+	find_replace(placeholder)}
+	for (let answers in saved_a["checkbox"]) {
+console.log({answers:{ "unchecked": saved_a["checkbox"]["checked"],"unchecked": saved_a["checkbox"]["checked"]["unchecked"]} });
+	checkbox({answers:{ "unchecked": saved_a["checkbox"]["checked"],"unchecked": saved_a["checkbox"]["checked"]["unchecked"]} }) ;
+}
+}	
+	
+
 
 
 function getOption(this_element  ) {
-	const class_name = this_element.classList;
-    console.log(class_name[0]);
-    const checked = document.querySelectorAll(`.${class_name[0]}:checked`);
-
-    //console.log([...checked]);
-    const unchecked = document.querySelectorAll(`.${class_name[0]}:not(:checked)`);
-	let singleOption = { class_name: {checked:checked , unchecked: unchecked}};
-	try 
-	{saved_q.push(singleOption);}
-	catch (e)
-	{ alert("you have submitted, please use undo if you want to chaneg your input");}
+	const class_name = this_element.classList[0];
+    console.log("class name for question is "+class_name);
+    const checked = document.querySelectorAll(`.${class_name}:checked`);
+	 const unchecked = document.querySelectorAll(`.${class_name}:not(:checked)`);
+	//console.log([...checked]);
+	const checked_list = [] ;
+	checked.forEach(element =>checked_list.push(element.id) );
+	const unchecked_list = [] ;
+	unchecked.forEach(element =>unchecked_list.push(element.id) );
+	console.log("uncheck and checked"+checked_list,unchecked_list)
+    saved_a["checkbox"][class_name] =  {"checked":checked_list,"unchecked":unchecked_list}; 
+    let singleOption = {};
+	singleOption[class_name] =  {"checked":checked_list,"unchecked":unchecked_list};
+	//try {
+	console.log("+++++++++++++++++"+checked_list);
+	
+	//}catch (e)
+	//{ alert("you have submitted, please use undo if you want to chaneg your input");}
 	checkbox(singleOption);
 	
 }
@@ -283,14 +317,14 @@ function checkbox(options) {
 	
 	const selection = window.getSelection();
 	selection.removeAllRanges();
-	const class_name = options.key;
+	const class_name = Object.keys(options)[0];
 	console.log(class_name);
-	const checked = options.value
-
+	const checked = options[class_name]["checked"];
+	const unchecked = options[class_name]["unchecked"];
     
     //console.log([...unchecked]);
     for (let i = 0; i < checked.length; i++) {
-        let check_box_item = checked[i].id;
+        let check_box_item = checked[i];
         //console.log(check_box );
         let name = check_box_item.split('_')[1];
         let match_name = prefix.concat(name.toUpperCase());
@@ -478,7 +512,7 @@ function checkbox(options) {
     }
 
     for (let i = 0; i < unchecked.length; i++) {
-        let check_box_item = unchecked[i].id;
+        let check_box_item = unchecked[i];
         //console.log(check_box );
         let name = check_box_item.split('_')[1];
         let match_name = prefix.concat(name.toUpperCase());
@@ -688,11 +722,14 @@ function match_remove(right_range) {
  * @param {string} before - the keyword need to be replaced.
  * @param {string} after - the formal text represented by the keyword.
  */
-function find_replace(before, after) {
+function find_replace(option) {
+
     const selection = window.getSelection();
 
     selection.removeAllRanges();
-    //save_undo();
+    //save_undo(this);
+	const before = Object.keys(option)[0];
+	const after = option[before];
     if (window.find) //for chrome, firefox
     {
         while (window.find(before)) {
@@ -754,6 +791,9 @@ function find_replace(before, after) {
   <div class="nav nav-tabs   h6" id="nav-tab" role="tablist" >
   <button onclick = "save_state()">new save function</button>
   <button onclick = "editor.openDocumentFromUrl(saved_url, startEditing);">new load</button>
+  <button onclick = "save_json()">save_json</button>
+  <button onclick = "reload_all()">reload saved</button>
+  
   
     <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General project information</button>
     <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" data-bs-target="#nav-data_type" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
@@ -775,10 +815,10 @@ function find_replace(before, after) {
 		       placeholder="give your project name here">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);">
+			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
 	
@@ -791,10 +831,10 @@ function find_replace(before, after) {
 		       placeholder="study object here">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);">
+			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
 	<form >
@@ -805,10 +845,10 @@ function find_replace(before, after) {
 		       placeholder="project aim here">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);">
+			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
 	
@@ -821,10 +861,10 @@ function find_replace(before, after) {
 		       placeholder="dataofficer here">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);">
+			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
 	
@@ -886,7 +926,7 @@ function find_replace(before, after) {
 			       onclick="getOption(this)" > 
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
 
 
 
@@ -937,10 +977,10 @@ function find_replace(before, after) {
 		       placeholder="month of update">
 			  <input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
+			       onclick="replace(this)" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
 			   </form>
 			    <br>
 </div>
@@ -956,10 +996,10 @@ function find_replace(before, after) {
 		       placeholder="previous project here">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
+			       onclick="replace(this)" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
 </div>
@@ -976,10 +1016,10 @@ function find_replace(before, after) {
 		       placeholder=" proprietary software ">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
+			       onclick="replace(this)" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
 </div>
@@ -1080,7 +1120,7 @@ function find_replace(before, after) {
 			       onclick="getOption(this)" class=> 
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   </div>
   <div class="tab-pane fade  align-items-center" id="nav-data_volumn" role="tabpanel" aria-labelledby="nav-data_volumn-tab">
   
@@ -1093,10 +1133,10 @@ function find_replace(before, after) {
 		       placeholder="give your raw data volume here">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);">
+			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
 				   <br>
 		<label for="name is">derived data volume</label>
 		
@@ -1106,10 +1146,10 @@ function find_replace(before, after) {
 		       placeholder="give your derived data volume here">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
-			       onclick="replace(this);">
+			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
   
@@ -1168,10 +1208,10 @@ function find_replace(before, after) {
 		       placeholder=" " class="d-none" value= " " >
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="press if you don't need visualization"
-			       onclick="replace(this);">
+			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
-			       onclick="undo();">
+			       onclick="undo(this);">
   
 	</form>
 	 </div>
@@ -1188,7 +1228,14 @@ function find_replace(before, after) {
     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
   </svg>
   some Metabolomics partners considers Metabolights not an accepted standard <a href="#" class="alert-link">issue warning</a>. issue warning
-  <button class="btn" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+ <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div class="alert alert-danger fade show" role="alert">
+	   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+  </svg>
+  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+ <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 </div>
 
