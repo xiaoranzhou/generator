@@ -272,13 +272,15 @@ function reload_answers() {
 
     
 	for (let answers in saved_a["replace"]) { 
-	let placeholder = {};
-	placeholder[answers] = saved_a["replace"][answers]
+	let singleOption = {};
+	singleOption[answers] = saved_a["replace"][answers]
 	console.log();
-	find_replace(placeholder)}
+	find_replace(singleOption)}
 	for (let answers in saved_a["checkbox"]) {
-console.log({answers:{ "unchecked": saved_a["checkbox"]["checked"],"unchecked": saved_a["checkbox"]["checked"]["unchecked"]} });
-	checkbox({answers:{ "unchecked": saved_a["checkbox"]["checked"],"unchecked": saved_a["checkbox"]["checked"]["unchecked"]} }) ;
+	let singleOption = {};
+	singleOption[answers] = { "checked": saved_a["checkbox"][answers]["checked"], "unchecked" : saved_a["checkbox"][answers]["unchecked"] }
+console.log(singleOption);
+	checkbox(singleOption) ;
 }
 }	
 	
