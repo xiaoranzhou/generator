@@ -14,31 +14,27 @@
   </head>
   <script>
 	var saved_a = {"replace": {}, "checkbox": {}},
-	    saved_url,
         editor = null,
         editorOptions,
 		loadedFilename;
-    var  saved_status = [];
+		
 
-	var undo_doc;
-	var refresh_doc;
 	const prefix = '$_';
 	function save_json()  {
 	aJSONString=JSON.stringify(saved_a);
 	const blob = new Blob([aJSONString], {type: "application/json"});
 	saveAs(blob);
-	
+
 	}
-		function laod_answers ( ) {
 	
-	
-	}
 //FileSaver.saveAs(file);
     /*jslint emptyblock: true*/
     /**
      * @return {undefined}
      */
     function startEditing() {
+    }
+	    function endEditing() {
     }
     /*jslint emptyblock: false*/
 
@@ -231,7 +227,8 @@ function replace(child) {
 }
 
 function undo(this_element) {
-	
+	const selection = window.getSelection();
+selection.removeAllRanges();
     const previous_element = this_element.previousElementSibling;
 	console.log(previous_element.previousElementSibling.getAttribute('name'));
 	if (previous_element.getAttribute('onclick') == "replace(this)")
@@ -247,18 +244,18 @@ function undo(this_element) {
 	}
 	
 	console.log("json is " + JSON.stringify(saved_a));
+	reload_all();
 }
 
-async function reload_doc (){
-	editor.openDocumentFromUrl("DMP1.odt", startEditing);
-}
-function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
+
 
 
 
 function reload_all () {
+//Wodo.destroy();
+const selection = window.getSelection();
+selection.removeAllRanges();
+editor.closeDocument(console.log);
 editor.openDocumentFromUrl("DMP1.odt", startEditing);
 setTimeout(() => {  reload_answers(); }, 2000);
   // do things after the DOM loads partially
@@ -317,6 +314,8 @@ function getOption(this_element  ) {
 
 function checkbox(options) {
 	
+	//TODO some behaviors can still cause bugs
+	//gui.CaretManager(window,"localuser").destroy;
 	const selection = window.getSelection();
 	selection.removeAllRanges();
 	const class_name = Object.keys(options)[0];
@@ -329,8 +328,11 @@ function checkbox(options) {
         let check_box_item = checked[i];
         //console.log(check_box );
         let name = check_box_item.split('_')[1];
-        let match_name = prefix.concat(name.toUpperCase());
-        console.log("check for loop, starts " + match_name + " " + checked.length);
+		let match_name = "_________";
+        try { match_name = prefix.concat(name.toUpperCase());
+		console.log("check for loop, starts " + match_name + " " + checked.length);}
+		catch (e) {}
+        
         
 
         selection.removeAllRanges();
@@ -517,8 +519,11 @@ function checkbox(options) {
         let check_box_item = unchecked[i];
         //console.log(check_box );
         let name = check_box_item.split('_')[1];
-        let match_name = prefix.concat(name.toUpperCase());
-        console.log("uncheck for loop, starts " + match_name);
+        let match_name = "_________";
+		try { match_name = prefix.concat(name.toUpperCase());
+		console.log("uncheck for loop, starts " + match_name);}
+		catch (e) {match_name = "__________"}
+        
         const selection = window.getSelection();
 
         selection.removeAllRanges();
@@ -683,6 +688,8 @@ function checkbox(options) {
 
         console.log("uncheck for loop, ends " + match_name);
     }
+	
+
 }
 
 /**
@@ -778,8 +785,25 @@ function find_replace(option) {
     }
 
 }
+window.onload=function(){
+  const uploadJson = document.getElementById("upload");
+	uploadJson.addEventListener("change", reloadJson, false);
+	
 
-
+	function reloadJson() {
+	
+	let data = uploadJson.files[0];
+	const blob = new Blob([data], {type:"application/json"});
+	console.log(data);
+	const reader = new FileReader();
+	data1 = reader.readAsText(blob);
+    saved_a = data1;  
+	//saved_a = JSON.parse(uploadJson.files[0]);
+    console.log(saved_a);
+	reload_all();
+	}
+}
+ 
 
 						
 
@@ -791,8 +815,12 @@ function find_replace(option) {
 <div class="col-sm-4" style="height:auto;  "  id="interface" >
 <nav>
   <div class="nav nav-tabs   h6" id="nav-tab" role="tablist" >
-  <button onclick = "save_state()">new save function</button>
-  <button onclick = "editor.openDocumentFromUrl(saved_url, startEditing);">new load</button>
+  <form>
+  <div class="form-group">
+    <label for="upload">upload file</label>
+    <input type="file" class="form-control-file" id="upload" >
+  </div>
+</form>
   <button onclick = "save_json()">save_json</button>
   <button onclick = "reload_all()">reload saved</button>
   
