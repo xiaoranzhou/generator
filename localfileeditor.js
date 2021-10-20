@@ -25,11 +25,12 @@
 /*global document, window, runtime, FileReader, alert, Uint8Array, Blob, saveAs, Wodo*/
 
 function createEditor() {
-    "use strict";
+
 
     var editor = null,
         editorOptions,
-        loadedFilename;
+		loadedFilename;
+        
 
     /*jslint emptyblock: true*/
     /**
@@ -46,6 +47,7 @@ function createEditor() {
      */
     function guessDocUrl() {
         var pos, docUrl = String(document.location);
+		
         // If the URL has a fragment (#...), try to load the file it represents
         pos = docUrl.indexOf('#');
         if (pos !== -1) {
@@ -146,6 +148,28 @@ function createEditor() {
         editor.getDocumentAsByteArray(saveByteArrayLocally);
     }
 
+
+    function save_state(saved_status) {
+        function saveByteArrayOject(err, data) {
+			var 
+            if (err) {
+                alert(err);
+                return;
+            }
+            // TODO: odfcontainer should have a property mimetype
+            var mimetype = "application/vnd.oasis.opendocument.text",
+                filename = loadedFilename || "DMPs.odt",
+                blob = new Blob([data.buffer], {type: mimetype}),
+				saved_url = URL.createObjectURL(blob) 		;
+            
+            // TODO: hm, saveAs could fail or be cancelled
+            editor.setDocumentModified(false);
+        }
+
+        editor.getDocumentAsByteArray(saveByteArrayOject);
+    }
+	
+	
     editorOptions = {
         loadCallback: load,
         saveCallback: save,

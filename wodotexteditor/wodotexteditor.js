@@ -29,6 +29,10 @@
  * @namespace
  * @name Wodo
  */
+ 
+
+ 
+ 
 window.Wodo = window.Wodo || (function () {
     "use strict";
 
@@ -406,9 +410,9 @@ window.Wodo = window.Wodo || (function () {
          */
         this.openDocumentFromUrl = function (docUrl, editorReadyCallback) {
             runtime.assert(docUrl, "document should be defined here.");
-            runtime.assert(!pendingEditorReadyCallback, "pendingEditorReadyCallback should not exist here.");
-            runtime.assert(!editorSession, "editorSession should not exist here.");
-            runtime.assert(!session, "session should not exist here.");
+            //runtime.assert(!pendingEditorReadyCallback, "pendingEditorReadyCallback should not exist here.");
+            //runtime.assert(!editorSession, "editorSession should not exist here.");
+            //runtime.assert(!session, "session should not exist here.");
 
             pendingMemberId = memberId;
             pendingEditorReadyCallback = function () {
@@ -488,7 +492,19 @@ window.Wodo = window.Wodo || (function () {
                 callback(new Error("No odfContainer set!"));
             }
         };
+        this.getDocumentAsObject = function (callback) {
+            var odfContainer = odfCanvas.odfContainer();
 
+            if (odfContainer) {
+                odfContainer.createByteArray(function (ba) {
+                    callback(null, ba);
+                }, function (errorString) {
+                    callback(new Error(errorString || "Could not create bytearray from OdfContainer."));
+                });
+            } else {
+                callback(new Error("No odfContainer set!"));
+            }
+        };
         /**
          * Sets the metadata fields from the given properties map.
          * Avoid setting certain fields since they are automatically set:
