@@ -13,21 +13,23 @@
 	<link href="favicon.ico" rel="icon">
   </head>
   <script>
-	var saved_a = {"replace": {}, "checkbox": {}},
+	let saved_a = {"replace": {}, "checkbox": {}},
         editor = null,
         editorOptions,
 		loadedFilename;
 		
 
 	const prefix = '$_';
+	
 	function save_json()  {
+
 	aJSONString=JSON.stringify(saved_a);
 	const blob = new Blob([aJSONString], {type: "application/json"});
 	saveAs(blob);
 
 	}
 	
-//FileSaver.saveAs(file);
+
     /*jslint emptyblock: true*/
     /**
      * @return {undefined}
@@ -230,7 +232,7 @@ function undo(this_element) {
 	const selection = window.getSelection();
 selection.removeAllRanges();
     const previous_element = this_element.previousElementSibling;
-	console.log(previous_element.previousElementSibling.getAttribute('name'));
+	console.log(previous_element.getAttribute('onclick'));
 	if (previous_element.getAttribute('onclick') == "replace(this)")
 	{
 	try {delete saved_a["replace"][previous_element.previousElementSibling.getAttribute('name')];}
@@ -243,7 +245,7 @@ selection.removeAllRanges();
 	catch (e) { console.log("no such content, already undo") ;}
 	}
 	
-	console.log("json is " + JSON.stringify(saved_a));
+	console.log("json is " + saved_a);
 	reload_all();
 }
 
@@ -251,13 +253,13 @@ selection.removeAllRanges();
 
 
 
-function reload_all () {
+function reload_all() {
 //Wodo.destroy();
 const selection = window.getSelection();
 selection.removeAllRanges();
 editor.closeDocument(console.log);
 editor.openDocumentFromUrl("DMP1.odt", startEditing);
-setTimeout(() => {  reload_answers(); }, 2000);
+setTimeout(() => {  reload_answers(); }, 1000);
   // do things after the DOM loads partially
   
 
@@ -306,6 +308,51 @@ function getOption(this_element  ) {
 	checkbox(singleOption);
 	
 }
+
+function issueWarning ()
+
+{
+const selection = window.getSelection();
+	selection.removeAllRanges();
+	let text;
+	if(window.find)
+	{
+	ns = window.find("#issuewarning", aWrapAround = 1);
+	while(ns)
+	{
+	let text_range= window.getSelection().getRangeAt(0).cloneRange();
+	let full_range = window.getSelection().getRangeAt(0).cloneRange();
+	text_range.setStart(window.getSelection().focusNode, window.getSelection().focusOffset);
+	window.find("#endissuewarning");
+	let end_range= window.getSelection().getRangeAt(0).cloneRange();
+	text_range.setEnd(window.getSelection().anchorNode, window.getSelection().anchorOffset);
+	full_range.setEnd(window.getSelection().focusNode, window.getSelection().focusOffset);
+	text = text_range.toString();
+	console.log("full range text is"+full_range.toString());
+	full_range.deleteContents();
+	
+	let div = document.createElement('div');
+	div.setAttribute("class","alert alert-danger");
+	div.setAttribute("role","alert");
+	let html1 = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>'+ text+ '<a href="#" class="alert-link">issue warning</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+	
+
+	div.innerHTML = html1;
+	document.getElementById("endText").appendChild(div)
+			ns = window.find("#issuewarning", aWrapAround = 1);
+	}
+	
+	
+	
+	
+	
+
+	}
+var div = document.createElement('div');
+
+}
+
+
 /**
  * edit checked/unchecked placeholders in the file.
  * @param {string} right_range - the extended keyword (includes #if and #endif) need to be replaced.
@@ -789,43 +836,103 @@ window.onload=function(){
   const uploadJson = document.getElementById("upload");
 	uploadJson.addEventListener("change", reloadJson, false);
 	
-
 	function reloadJson() {
+
+	uploadJson.files[0].text().then(text =>  
+	saved_a = JSON.parse(text)
+	);
+
+
+
 	
-	let data = uploadJson.files[0];
-	const blob = new Blob([data], {type:"application/json"});
-	console.log(data);
-	const reader = new FileReader();
-	data1 = reader.readAsText(blob);
-    saved_a = data1;  
+
+      
 	//saved_a = JSON.parse(uploadJson.files[0]);
-    console.log(saved_a);
+    console.log(JSON.stringify(saved_a));
 	reload_all();
 	}
-}
- 
 
-						
+	
+}
+var x =0;
+ function nav_next () {
+	 x= x+20;
+	let ele = document.getElementById("nav-tab")
+	console.log(ele);
+	let tabs = ele.querySelector('[class="nav-link active"]');
+		let p_bar = document.getElementById("p-bar");
+	
+	let nexts = tabs.nextElementSibling;
+	console.log(nexts);
+	try {nexts.click();
+
+	console.log(p_bar);
+	p_bar.style.setProperty("width", x+"%" );
+	
+	p_bar.setAttribute("aria-valuenow", x );
+	
+	}
+	catch (e){
+	x= 100;
+	alert("you have reached the end of the document, please save the document");
+		p_bar.style.setProperty("width", 100+"%" );
+	
+	p_bar.setAttribute("aria-valuenow", 100 );
+	issueWarning ();
+	}
+	console.log(tabs);
+
+ 
+ }
+
+function nav_previous () {
+	 
+	let ele = document.getElementById("nav-tab")
+	console.log(ele);
+	let tabs = ele.querySelector('[class="nav-link active"]');
+		let p_bar = document.getElementById("p-bar");
+	
+	let nexts = tabs.previousElementSibling;
+	console.log(nexts);
+	try {nexts.click();
+	x= x-20;
+	console.log(p_bar);
+	p_bar.style.setProperty("width", x+"%" );
+	
+	p_bar.setAttribute("aria-valuenow", x );
+	
+	}
+	catch (e){alert("you have reached the beginning of the document, please start editing");
+
+	p_bar.style.setProperty("width", 0+"%" );
+	
+	p_bar.setAttribute("aria-valuenow", 0 );
+	x= 0;}
+	console.log("x value is"+x);
+ 
+ }					
 
 		</script>			
  <body style="width:100%; height:auto; margin:0px; padding:0px "  >
 
+
+
+
+
 <div class="container-fluid main_container" >
 <div class="row"> 
-<div class="col-sm-4" style="height:auto;  "  id="interface" >
+    <div id="editorContainer" class="col-sm-8"  style="height:100vh; position: left;  padding:5px; ">
+    </div>
+<div class="col-sm-4" style="height:100vh;  "  id="interface" >
+
+
 <nav>
-  <div class="nav nav-tabs   h6" id="nav-tab" role="tablist" >
-  <form>
-  <div class="form-group">
-    <label for="upload">upload file</label>
-    <input type="file" class="form-control-file" id="upload" >
-  </div>
-</form>
-  <button onclick = "save_json()">save_json</button>
-  <button onclick = "reload_all()">reload saved</button>
+  <div class="nav nav-pills   h6" id="nav-tab" role="tablist" aria-label="page-nav" >
+  
+
   
   
-    <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General project information</button>
+    <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General information</button>
     <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" data-bs-target="#nav-data_type" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
     <button class="nav-link" id="nav-data_volumn-tab" data-bs-toggle="tab" data-bs-target="#nav-data_volumn" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_volumn" aria-selected="false">3. Data volume</button>
 	    <button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" data-bs-target="#nav-relevant_standards" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Relavent standards</button>
@@ -834,15 +941,17 @@ window.onload=function(){
 				    
   </div>
 </nav>
-<div class="tab-content align-items-center h6" id="nav-tabContent" >
-  <div class="tab-pane fade show active " id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
+<div class="tab-content  h6" id="nav-tabContent" >
+  <div class="tab-pane fade show active " id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab test">
   <p >1.1 Give the project name or acronym to be used:</p>
+  
+ 
 	<form >
-		<label for="project_name">The project name is:</label>
+		<label for="project_name"></label>
 		<input type="text"
 		       id="project_name"
 		       name="$_PROJECT"
-		       placeholder="give your project name here">
+		       placeholder="project name">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
@@ -852,13 +961,13 @@ window.onload=function(){
   
 	</form>
 	
-	  <p >1.2 Give the object to be studied:</p>
+	  <p >1.2 Give the object to be studied and the project aim:</p>
 	<form >
-		<label for="study_object">The study object is:</label>
+		<label for="study_object"></label>
 		<input type="text"
 		       id="study_object"
 		       name="$_STUDYOBJECT"
-		       placeholder="study object here">
+		       placeholder="study object">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
@@ -867,12 +976,13 @@ window.onload=function(){
 			       onclick="undo(this);">
   
 	</form>
+	<br>
 	<form >
-		<label for="project_aim">The aim of the project is:</label>
+		<label for="project_aim"></label>
 		<input type="text"
 		       id="project_aim"
 		       name="$_PROJECTAIM"
-		       placeholder="project aim here">
+		       placeholder="project aim">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
@@ -884,21 +994,22 @@ window.onload=function(){
 	
 	<p >1.3 Give the data officer name:</p>
 	<form >
-		<label for="dataofficer">The data officer name is:</label>
+		<label for="dataofficer"></label>
 		<input type="text"
 		       id="dataofficer"
 		       name="$_dataofficer"
-		       placeholder="dataofficer here">
+		       placeholder="data officer name">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
-				   <input class="btn btn-secondary btn-sm" type="button"
+		    <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo(this);">
   
 	</form>
 	
 	 <p >1.4 Chose some additional information</p>
+	 
 <div class="form-data_type form-check-inline ">
   <input class="form-check-input q_1st" type="checkbox" value="1" id="check_protect" >
   <label class="form-check-label" for="check_protect">
@@ -907,7 +1018,7 @@ window.onload=function(){
   <br>
     <input class="form-check-input q_1st" type="checkbox" value="2" id="check_dataplant"  data-bs-toggle="collapse" data-bs-target="#q_5th_a" aria-expanded="false" aria-controls="q_5th_a" checked>
   <label class="form-check-label" for="check_dataplant">
-    Yes! I will use dataplant.
+    Yes! I will use <a href="https://nfdi4plants.github.io/">DataPlant</a>.
   </label>
 
   <br>
@@ -950,15 +1061,16 @@ window.onload=function(){
   
   
 </div> 
-<br>
-	<input class="q_1st btn btn-primary btn-sm" type="button" id="form-check-input"
+
+<p>
+	<input class="q_1st btn btn-primary form-check-inline btn-sm" type="button" id="form-check-input"
 			       value="submit "
 			       onclick="getOption(this)" > 
 				   <input class="btn btn-secondary btn-sm" type="button"
 			       value="undo"
 			       onclick="undo(this);">
 
-
+</p>
 
 
   <div class="collapse" id="q_5th_a">
@@ -1062,7 +1174,7 @@ window.onload=function(){
 
  
  
- <div class="tab-pane fade  align-items-center" id="nav-data_type" role="tabpanel" aria-labelledby="nav-data_type-tab">
+ <div class="tab-pane fade  " id="nav-data_type" role="tabpanel" aria-labelledby="nav-data_type-tab">
   <p>2. What kind of data do you handle:</p>
   <div class="form-data_type form-check-inline">
   <input class="form-check-input q_2nd" type="checkbox" value="1" id="check_image" >
@@ -1152,15 +1264,15 @@ window.onload=function(){
 			       value="undo"
 			       onclick="undo(this);">
   </div>
-  <div class="tab-pane fade  align-items-center" id="nav-data_volumn" role="tabpanel" aria-labelledby="nav-data_volumn-tab">
+  <div class="tab-pane fade  " id="nav-data_volumn" role="tabpanel" aria-labelledby="nav-data_volumn-tab">
   
   <p >3. How much data do you think you will generate:</p>
 	<form >
-		<label for="name is">raw data volume</label>
+		<label for="name is"> </label>
 		<input type="text"
 		       id="raw_data"
 		       name="$_RAWDATA"
-		       placeholder="give your raw data volume here">
+		       placeholder="raw data volume (in GiB)">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
@@ -1168,12 +1280,12 @@ window.onload=function(){
 			       value="undo"
 			       onclick="undo(this);">
 				   <br>
-		<label for="name is">derived data volume</label>
-		
+		<label for="name is"> </label>
+		<br>
 		<input type="text"
 		       id="derived_data"
 		       name="$_DERIVEDDATA"
-		       placeholder="give your derived data volume here">
+		       placeholder="derived data volume (in GiB)">
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
@@ -1186,7 +1298,7 @@ window.onload=function(){
   </div>
    
    
-   <div class="tab-pane fade  align-items-center" id="nav-relevant_standards" role="tabpanel" aria-labelledby="nav-relevant_standards-tab">
+   <div class="tab-pane fade   " id="nav-relevant_standards" role="tabpanel" aria-labelledby="nav-relevant_standards-tab">
     <p>4. are there any standards that are relevant for you?</p>
 	<div class="form-data_type  form-check-inline">
   <input class="form-check-input q_5th_b" type="checkbox" value="9" id="check_MIAPPE" >
@@ -1230,7 +1342,7 @@ window.onload=function(){
 	</div>
    
    
-     <div class="tab-pane fade  align-items-center" id="nav-data_analysis" role="tabpanel" aria-labelledby="nav-data_analysis-tab">
+     <div class="tab-pane fade   " id="nav-data_analysis" role="tabpanel" aria-labelledby="nav-data_analysis-tab">
 	 <br>
 	 	<input type="text"
 		       id="raw_data"
@@ -1246,30 +1358,60 @@ window.onload=function(){
 	</form>
 	 </div>
 
-	
+
+<div id= "endText">
+
+</div>
+<div class= "position-absolute bottom-0 start-20" >
+
+<div class="">
+<form>
+  <div class="form-group ">
+    <label for="upload"></label>
+    <input type="file" class="form-control-file btn-sm btn" value= "load" id="upload" >
+
+  </div>
+
+
+
+</form>
+</div>
+<div class="">
+	 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()">save json</button>
+	  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">save odt</button>
 	 
+	 
+	 </div>
+	
+	 <div class="btn-group" >
+<button  type="button" class="btn btn-previous btn-sm " value= "previous" style= "width:10vh;" onclick = "nav_previous()">< previous</button>
+<button  type="button" class="btn btn-next btn-sm " value= "next" style= "width:10vh;" onclick= "nav_next()">next ></button>
+ <br>
+</div>
+
+	  
+	  
+	  
+	  
+	  <div class="progress"  >
+  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id= "p-bar"> Progress </div>
+	</div>
+	
+</div>
+	
+
 
 	
 	  
 	   </div>
 	   
-	   <div class="alert alert-danger" role="alert">
-	   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-  </svg>
-  some Metabolomics partners considers Metabolights not an accepted standard <a href="#" class="alert-link">issue warning</a>. issue warning
- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<div class="alert alert-danger fade show" role="alert">
-	   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-  </svg>
-  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-</div>
+	   
 
-	
+
+
+<br>
+
+</div>	
 	
 
 
@@ -1279,8 +1421,7 @@ window.onload=function(){
 	  
 
 
-    <div id="editorContainer" class="col-sm-8"  style="height:100vh; position: left;  padding:5px; ">
-    </div>
+
 	</div>
 	</div>
 	
