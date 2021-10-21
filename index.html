@@ -912,6 +912,25 @@ function nav_previous () {
  
  }					
 
+window.addEventListener("load", function() { 
+  document.getElementById("nav-tab").addEventListener("click", function(e) {
+    const tgt = e.target;
+    if (tgt.classList.contains("nav-link")) {
+      e.preventDefault(); 
+      let x = tgt.value*20;
+	  let p_bar = document.getElementById("p-bar");
+	  p_bar.style.setProperty("width", x+"%" );
+	
+	p_bar.setAttribute("aria-valuenow", x );
+	  
+	  
+    }
+  });
+});
+
+
+
+
 		</script>			
  <body style="width:100%; height:auto; margin:0px; padding:0px "  >
 
@@ -932,11 +951,11 @@ function nav_previous () {
 
   
   
-    <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General information</button>
-    <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" data-bs-target="#nav-data_type" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
-    <button class="nav-link" id="nav-data_volumn-tab" data-bs-toggle="tab" data-bs-target="#nav-data_volumn" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_volumn" aria-selected="false">3. Data volume</button>
-	    <button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" data-bs-target="#nav-relevant_standards" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Relavent standards</button>
-<button class="nav-link" id="nav-nav-data_analysis-tab" data-bs-toggle="tab" data-bs-target="#nav-data_analysis" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_analysis" aria-selected="false">5. Data Analysis</button>
+    <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" value ="1" data-bs-target="#nav-information" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General information</button>
+    <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" value ="2" data-bs-target="#nav-data_type" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
+    <button class="nav-link" id="nav-data_volumn-tab" data-bs-toggle="tab" value ="3" data-bs-target="#nav-data_volumn" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_volumn" aria-selected="false">3. Data volume</button>
+	<button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" value ="4" data-bs-target="#nav-relevant_standards" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Relavent standards</button>
+    <button class="nav-link" id="nav-nav-data_analysis-tab" data-bs-toggle="tab" value ="5" data-bs-target="#nav-data_analysis" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_analysis" aria-selected="false">5. Data Analysis</button>
 
 				    
   </div>
