@@ -3,7 +3,7 @@
 This tool is purely web-based, front end and written in javascript. 
 Currently both the input and output are .odt files. 
 
-To try this tool, you can go to [this link](http://xrzhou.com/generator) or [another link](https://nfdi4plants.github.io/plan-generator/)
+To try this tool, you can go to [this link](http://xrzhou.com/generator) or [another link](https://nfdi4plants.de/plan-generator/)
 
 An example output is generated and stored as "output.odt" in the root folder.
 The "What you see is what you get" editor is from WEBODF developed by a Germany company KO GmbH https://webodf.org/. After trying many online docx editor or generator, I found using javascript to modify the webodf is the best way.
