@@ -5,6 +5,20 @@ Currently both the input and output are .odt files.
 
 To try this tool, you can go to [this link](http://xrzhou.com/generator) or [another link](https://nfdi4plants.de/plan-generator/)
 
+You can also try an edited document through saved answers in JSON format. [try this link for some answered "replace" questions](https://nfdi4plants.de/plan-generator/?https://raw.githubusercontent.com/nfdi4plants/plan-generator/main/saved_json/test_find.json)
+[try this link for answers include the first checkbox](https://nfdi4plants.de/plan-generator/?https://raw.githubusercontent.com/nfdi4plants/plan-generator/main/saved_json/test_half.json)
+
+### Current features:
+Generally all functions works. There are still some bugs but no hard barriers. Works smoother than I expected.
+Although some questions and keywords are mismatched, see next sections.
+
+1. replace any $_KEYWORDS in the text. It avoids replacing $_KEYWORDSEXTENDED or $_KEYWORDS1|KEYWORDS2 or #if_$KEYWORDS. This is wraped in find_replace function.
+2. By using check boxes, it removes #if_ and #endif_ around the $_KEYWORDS in the checked boxes and removes all text in the unchecked keywords. Then replace the selected keywords. It can also handle | symbol. The "!" is not implemented. 
+3. Automatic expose hidden sub-question in question 5., if user does not use DataPLANT, then she/he need to answer question 5a.
+4. Individual "undo" button for every question. Each question can return to original placeholders no matter how many other question the user has answered.
+5. User can save and load answered questions in JSON format. The saved JSON formats keeps the document undo-able at any time point.
+6. The user can share a link with "/?" + "URL of saved JSON answers", the receiver of the link can directly open an edited document and continue editing.
+
 An example output is generated and stored as "output.odt" in the root folder.
 The "What you see is what you get" editor is from WEBODF developed by a Germany company KO GmbH https://webodf.org/. After trying many online docx editor or generator, I found using javascript to modify the webodf is the best way.
 
@@ -23,16 +37,7 @@ WEBODF
 FileSaver.js
 
 
-### Current functions:
-Generally all functions works. There are still some bugs but no hard barriers. Works smoother than I expected.
-Although some questions and keywords are mismatched, see next sections.
-
-1. replace any $_KEYWORDS in the text. It avoids replacing $_KEYWORDSEXTENDED or $_KEYWORDS1|KEYWORDS2 or #if_$KEYWORDS. This is wraped in find_replace function.
-2. By using check boxes, it removes #if_ and #endif_ around the $_KEYWORDS in the checked boxes and removes all text in the unchecked keywords. Then replace the selected keywords. It can also handle | symbol. The "!" is not implemented. 
-3. Automatic expose hidden sub-question in question 5., if user does not use DataPLANT, then she/he need to answer question 5a.
-
-
 ### Missing functions and TODO.
 TODO: 
-- undo button
-- \#issuewarning warnings should only be triggered when needed
+- some link/bookmarks for issue warning, but should be difficult.
+- highlight the changed text.. not sure if it is necessary.
