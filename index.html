@@ -149,25 +149,7 @@
     }
 
 
-    function save_state(saved_status) {
-        function saveByteArrayOject(err, data) {
-			
-            if (err) {
-                alert(err);
-                return;
-            }
-            // TODO: odfcontainer should have a property mimetype
-            var mimetype = "application/vnd.oasis.opendocument.text",
-                filename = loadedFilename || "DMPs.odt",
-                blob = new Blob([data.buffer], {type: mimetype});
-				saved_url = URL.createObjectURL(blob) 		;
-            
-            // TODO: hm, saveAs could fail or be cancelled
-            editor.setDocumentModified(false);
-        }
 
-        editor.getDocumentAsByteArray(saveByteArrayOject);
-    }
 	
 	
     editorOptions = {
@@ -212,7 +194,21 @@ Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
 
 
 
+function test() {
+const selection = window.getSelection();
+	selection.removeAllRanges();
+window.find("What methods or software tools are needed to access the data?");
+let range= window.getSelection().getRangeAt(0);
+range.getBoundingClientRect();
+let new_selection = window.getSelection();
 
+let node = new_selection.anchorNode;
+node.parentElement.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+console.log( node.parentElement );
+selection.removeAllRanges();
+//element.scrollIntoView();
+
+}
 
 
 function replace(child) {
@@ -314,6 +310,23 @@ function go_bookmark (){
      behavior: 'smooth'
 });
 	}
+	
+function go_to(element1){
+const warning= element1.value;
+console.log("the warning text tag is "+ warning);
+const element = document.getElementById(warning);
+element.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+
+}
+function remove_warning(element){
+let warning_no = element.value;
+let warning = document.getElementById(warning_no);
+warning.remove();
+
+
+
+}	
+	
 function issueWarning ()
 
 {
@@ -323,6 +336,7 @@ const selection = window.getSelection();
 	if(window.find)
 	{
 	ns = window.find("#issuewarning", aWrapAround = 1);
+	let warning_number = 0; 
 	while(ns)
 	{
 	let text_range= window.getSelection().getRangeAt(0).cloneRange();
@@ -335,16 +349,20 @@ const selection = window.getSelection();
 	text = text_range.toString();
 	console.log("full range text is"+full_range.toString());
 	full_range.deleteContents();
-
+	let newText= document.createElement("warning_number"+warning_number);
+				newText.innerHTML = '<span id= "warning_number'+warning_number+'" class = "webodf-annotationHighlight">warning location</span>';
+    full_range.insertNode(newText);
+	const warning_no = "warning_number"+warning_number;			
 	let div = document.createElement('div');
 	div.setAttribute("class","alert alert-danger");
 	div.setAttribute("role","alert");
-	let html1 = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>'+ text+ '<button type="button" class="btn"  onclick ="" ></button><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+	let html1 = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>'+ text+ '<button type="button" value = "'+ warning_no+'" class="btn-primary"  onclick ="go_to(this)" >click to go to the warning location</button><button type="button" value = "'+ warning_no+'" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick=remove_warning(this) ></button>';
 	
 
 	div.innerHTML = html1;
 	document.getElementById("endText").appendChild(div)
 			ns = window.find("#issuewarning", aWrapAround = 1);
+			warning_number= warning_number+1;
 	}
 	
 	
@@ -391,10 +409,9 @@ function checkbox(options) {
         if (window.find) //for chrome, firefox
         {
             selection.removeAllRanges();
-            //var ns = window.find(match_name, aWrapAround = 1);
             
 			let ns = window.find(match_name, aWrapAround = 1);
-			//let ns = window.find(/genomic/i, aWrapAround = 1);
+
 
             while (ns) {
 
@@ -824,7 +841,11 @@ function find_replace(option) {
             } else {
                 console.log(range.toString(), "deleted with last letter: " + last_letter);
                 range.deleteContents();
-                range.insertNode(document.createTextNode(first_letter + after + last_letter));
+				
+				let newText= document.createElement(before.split("_")[1]+"-to-" +after);
+				newText.innerHTML = '<span class = "webodf-annotationHighlight">'+
+				first_letter + after + last_letter+'</span>';
+                range.insertNode(newText);
 
             }
 
@@ -848,7 +869,7 @@ window.onload=function(){
     .then(response => response.json())
     .then(json => 
 	{
-		saved_a= json;
+	saved_a= json;
 	reload_all();
 	
 	}
@@ -889,7 +910,7 @@ var x =0;
 		let p_bar = document.getElementById("p-bar");
 	
 	let nexts = tabs.nextElementSibling;
-	console.log(nexts);
+	//console.log(nexts);
 	try {nexts.click();
 
 	console.log(p_bar);
@@ -966,9 +987,9 @@ window.addEventListener("load", function() {
 
 <div class="container-fluid main_container" >
 <div class="row"> 
-    <div id="editorContainer" class="col-sm-8"  style="height:100vh; position: left;  padding:5px; ">
+    <div id="editorContainer" class="col-sm-8"  style="height:100vh; float: left;  padding:0px ">
     </div>
-<div class="col-sm-4" style="height:100vh;  "  id="interface" >
+<div class="col-sm-4" style="height:100vh;   padding:1px;overflow:scroll; "  id="interface" >
 
 
 <nav>
@@ -1425,7 +1446,8 @@ window.addEventListener("load", function() {
 
 
 	 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()">save json</button>
-	  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">save odt</button>
+	  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">export document</button>
+	  <button id="test" class="btn-sm btn-secondary" onclick = "test()">debug test</button>
 	 
 	 
 
