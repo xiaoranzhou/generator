@@ -1030,10 +1030,11 @@ window.addEventListener("load", function() {
 	  <p >1.2 Give the object to be studied and the project aim:</p>
 	<form >
 		<label for="study_object"></label>
-		<input type="text"
+
+		<textarea type="text"
 		       id="study_object"
 		       name="$_STUDYOBJECT"
-		       placeholder="study object">
+		       placeholder="study object"rows="3" style="width: 95%;"></textarea>
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
@@ -1045,10 +1046,10 @@ window.addEventListener("load", function() {
 	<br>
 	<form >
 		<label for="project_aim"></label>
-		<input type="text"
+		<textarea type="text"
 		       id="project_aim"
 		       name="$_PROJECTAIM"
-		       placeholder="project aim">
+		       placeholder="project aim" rows="3" style="width: 95%;"></textarea>
 			<input class="btn btn-primary btn-sm" type="button"
 			       value="replace"
 			       onclick="replace(this)">
