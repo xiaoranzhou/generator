@@ -6,7 +6,10 @@
 
     	<link href="css/bootstrap.rtl.min.css" rel="stylesheet" >
 	<link href="css/custom.css" rel="stylesheet">
+	<link href="css/bs5-intro-tour.css" rel="stylesheet" />
+
     <title>Data Management Plan Generator</title>
+	<script src="bs5-intro-tour.js"></script>
      <script src="wodotexteditor/wodotexteditor.js" type="text/javascript" charset="utf-8"></script>
     <script src="FileSaver.js" type="text/javascript" charset="utf-8"></script>
 
@@ -28,8 +31,42 @@
 	saveAs(blob);
 
 	}
-	
-
+	var steps = [
+    {
+      title: "Welcome to DMP Generator",
+      content: "<p>Let's generate a Data Management Plan by a few clicks</p>"
+    }, {
+      id: "interface",
+      content: "<p>You can answer questions here</p>"
+    }, {
+      id: "nav-tab",
+      content: "<p>There are five pages of questions in total</p>"
+    }, {
+      id: "nav-tabContent",
+      content: "<p>Each page has a few questions</p>"
+    }
+	, {
+      id: "project_name",
+      content: "<p>Answer the first question by type your project name</p>"
+    }, {
+      id: "project_name_submit",
+      content: "<p>Then press submit</p>"
+    }, {
+      id: "editorContainer1",
+      content: "<p>Now the document's content has included your project name</p>"
+    }, {
+      id: "json_save",
+      content: "<p>You can save your answers</p>"
+    }, {
+      id: "upload",
+      content: "<p>and then upload it to continue your generation</p>"
+    }
+	, {
+      id: "odt_save",
+      content: "<p>after answering all questions, you can export your document</p>"
+    }
+];
+var tour = new Tour(steps);
     /*jslint emptyblock: true*/
     /**
      * @return {undefined}
@@ -960,6 +997,7 @@ function nav_previous () {
  }					
 
 window.addEventListener("load", function() { 
+  tour.show();	  
   document.getElementById("nav-tab").addEventListener("click", function(e) {
     const tgt = e.target;
     if (tgt.classList.contains("nav-link")) {
@@ -970,7 +1008,7 @@ window.addEventListener("load", function() {
 	
 	p_bar.setAttribute("aria-valuenow", x );
 	  
-	  
+   
     }
   });
 });
@@ -987,11 +1025,14 @@ window.addEventListener("load", function() {
 
 <div class="container-fluid main_container" >
 <div class="row"> 
-    <div id="editorContainer" class="col-sm-8"  style="height:100vh; float: left;  padding:0px ">
+    <div   class="col-sm-8" id="editorContainer1"  style="height:100vh;   ">
+	<div  class="col-sm-12" id="editorContainer" style="height:100vh; float: left;  padding:0px ">
+	
     </div>
-<div class="col-sm-4" style="height:100vh;   padding:1px;overflow:scroll; "  id="interface" >
+    </div>
+<div class="col-sm-4" style="height:100vh;   overflow-x: hidden;overflow-y: hidden; " id="interface" >
 
-
+<div class = "row" style="height:80vh; width = 100%;overflow-x: hidden;overflow-y: scroll;z-index: -1; ">
 <nav>
   <div class="nav nav-pills   h6" id="nav-tab" role="tablist" aria-label="page-nav" >
   
@@ -1001,7 +1042,7 @@ window.addEventListener("load", function() {
     <button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" value ="1" data-bs-target="#nav-information" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-information" aria-selected="true">1. General information</button>
     <button class="nav-link" id="nav-data_type-tab" data-bs-toggle="tab" value ="2" data-bs-target="#nav-data_type" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_type" aria-selected="false">2. Data type</button>
     <button class="nav-link" id="nav-data_volumn-tab" data-bs-toggle="tab" value ="3" data-bs-target="#nav-data_volumn" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_volumn" aria-selected="false">3. Data volume</button>
-	<button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" value ="4" data-bs-target="#nav-relevant_standards" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Relavent standards</button>
+	<button class="nav-link" id="nav-relevant_standards-tab" data-bs-toggle="tab" value ="4" data-bs-target="#nav-relevant_standards" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-relevant_standards" aria-selected="false">4. Standards</button>
     <button class="nav-link" id="nav-nav-data_analysis-tab" data-bs-toggle="tab" value ="5" data-bs-target="#nav-data_analysis" class="btn btn-primary btn-sm" type="button" role="tab" aria-controls="nav-data_analysis" aria-selected="false">5. Data Analysis</button>
 
 				    
@@ -1018,11 +1059,11 @@ window.addEventListener("load", function() {
 		       id="project_name"
 		       name="$_PROJECT"
 		       placeholder="project name">
-			<input class="btn btn-primary btn-sm" type="button"
+			<input class="btn btn-primary btn-sm" type="button" id="project_name_submit"
 			       value="replace"
 			       onclick="replace(this)">
 				   <input class="btn btn-secondary btn-sm" type="button"
-			       value="undo"
+			       value="undo" id="project_name_undo"
 			       onclick="undo(this);">
   
 	</form>
@@ -1431,12 +1472,16 @@ window.addEventListener("load", function() {
 <div id= "endText">
 
 </div>
-<div class= "position-f bottom-0 start-0" >
+</div>
+</div>	
+<div class ="row card text-center" style="height:18vh;position: absolute;
+  bottom: 0;background:lightgrey ;width: 33vw">
+<div class= ""  >
 
 
 <form>
-  <div class="form-group ">
-    <label for="upload"></label>
+  <div class="form-group d-flex justify-content-center ">
+    <label for="upload">upload JSON</label>
     <input type="file" class="form-control-file btn-sm btn" value= "load" id="upload" >
 
   </div>
@@ -1446,13 +1491,13 @@ window.addEventListener("load", function() {
 </form>
 
 
-	 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()">save json</button>
+	 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()" >save json</button>
 	  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">export document</button>
 	  <button id="test" class="d-none btn-sm btn-secondary" onclick = "test()">debug test</button>
 	 
 	 
 
-	
+	<br>
 	 <div class="btn-group" >
 <button  type="button" class="btn btn-previous btn-sm " value= "previous" style= "width:10vh;" onclick = "nav_previous()">< previous</button>
 <button  type="button" class="btn btn-next btn-sm " value= "next" style= "width:10vh;" onclick= "nav_next()">next ></button>
@@ -1464,7 +1509,7 @@ window.addEventListener("load", function() {
 	  
 	  
 	  <div class="progress"  >
-  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id= "p-bar"> Progress </div>
+  <div class="progress-bar progress-bar-striped" role="progressbar"  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id= "p-bar"> Progress </div>
 	</div>
 	
 </div>
@@ -1481,9 +1526,9 @@ window.addEventListener("load", function() {
 
 <br>
 
-</div>	
-	
 
+	
+</div>	
 
 	
 
