@@ -962,6 +962,7 @@ function nav_previous () {
 
 window.addEventListener("load", function() { 
   tour.show();
+  
 	console.log("current url is: "+window.location.href);
 	const urls= window.location.href.split("?");
 	if (urls.length>1)
@@ -972,7 +973,7 @@ window.addEventListener("load", function() {
     .then(json => 
 	{
 	saved_a= json;
-	reload_all();
+	setTimeout(() => reload_all(),1000);
 	
 	}
 
