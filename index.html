@@ -898,44 +898,7 @@ function find_replace(option) {
 
 }
 window.onload=function(){
-	console.log("current url is: "+window.location.href);
-	const urls= window.location.href.split("?");
-	if (urls.length>1)
-	{
-	
-	fetch(urls[1])
-    .then(response => response.json())
-    .then(json => 
-	{
-	saved_a= json;
-	reload_all();
-	
-	}
 
-	)
-
-	}
-
-	
-	
-  const uploadJson = document.getElementById("upload");
-	uploadJson.addEventListener("change", reloadJson, false);
-	
-	function reloadJson() {
-
-	uploadJson.files[0].text().then(text =>  
-	saved_a = JSON.parse(text)
-	);
-
-
-
-	
-
-      
-	//saved_a = JSON.parse(uploadJson.files[0]);
-    console.log(JSON.stringify(saved_a));
-	reload_all();
-	}
 
 	
 }
@@ -998,7 +961,45 @@ function nav_previous () {
  }					
 
 window.addEventListener("load", function() { 
-  tour.show();	  
+  tour.show();
+	console.log("current url is: "+window.location.href);
+	const urls= window.location.href.split("?");
+	if (urls.length>1)
+	{
+	
+	fetch(urls[1])
+    .then(response => response.json())
+    .then(json => 
+	{
+	saved_a= json;
+	reload_all();
+	
+	}
+
+	)
+
+	}
+
+	
+	
+  const uploadJson = document.getElementById("upload");
+	uploadJson.addEventListener("change", reloadJson, false);
+	
+	function reloadJson() {
+
+	uploadJson.files[0].text().then(text =>  
+	saved_a = JSON.parse(text)
+	);
+
+
+
+	
+
+      
+	//saved_a = JSON.parse(uploadJson.files[0]);
+    console.log(JSON.stringify(saved_a));
+	reload_all();
+	}  
   document.getElementById("nav-tab").addEventListener("click", function(e) {
     const tgt = e.target;
     if (tgt.classList.contains("nav-link")) {
