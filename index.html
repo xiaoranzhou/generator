@@ -842,9 +842,10 @@ function find_replace(option) {
     const selection = window.getSelection();
 
     selection.removeAllRanges();
-    //save_undo(this);
+
 	const before = Object.keys(option)[0];
 	const after = option[before];
+	
     if (window.find) //for chrome, firefox
     {
         while (window.find(before)) {
@@ -878,8 +879,8 @@ function find_replace(option) {
             } else {
                 console.log(range.toString(), "deleted with last letter: " + last_letter);
                 range.deleteContents();
-				
-				let newText= document.createElement(before.split("_")[1]+"-to-" +after);
+				console.log(encodeURIComponent(after));
+				let newText= document.createElement(before.split("_")[1]+"-to-" );
 				newText.innerHTML = '<span class = "webodf-annotationHighlight">'+
 				first_letter + after + last_letter+'</span>';
                 range.insertNode(newText);
