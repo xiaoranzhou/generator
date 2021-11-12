@@ -226,8 +226,23 @@ var tour = new Tour(steps);
             editor.openDocumentFromUrl(docUrl, startEditing);
         }
     }
-    
 Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
+async function reload_all() {
+//Wodo.destroy();
+const selection = window.getSelection();
+selection.removeAllRanges();
+let wait_editor = startEditing();
+
+editor.closeDocument(console.log);
+editor.openDocumentFromUrl("DMP1.odt", startEditing);
+setTimeout(() => {  reload_answers(); }, 1000);
+  // do things after the DOM loads partially
+  
+
+
+}
+    
+
 
 
 
@@ -286,18 +301,7 @@ selection.removeAllRanges();
 
 
 
-function reload_all() {
-//Wodo.destroy();
-const selection = window.getSelection();
-selection.removeAllRanges();
-editor.closeDocument(console.log);
-editor.openDocumentFromUrl("DMP1.odt", startEditing);
-setTimeout(() => {  reload_answers(); }, 1000);
-  // do things after the DOM loads partially
-  
 
-
-}
 
 
 function reload_answers() {
@@ -973,7 +977,10 @@ window.addEventListener("load", function() {
     .then(json => 
 	{
 	saved_a= json;
-	setTimeout(() => reload_all(),1000);
+reload_all();
+            
+    
+	//setTimeout(() => reload_all(),1000);
 	
 	}
 
@@ -1022,6 +1029,28 @@ window.addEventListener("load", function() {
 		</script>			
  <body style="width:100%; height:auto; margin:0px; padding:0px "  >
 
+
+<div class="cont" id = "loading">
+  <div class="paper"></div>
+  <button class="generator"><div class='loading-in'>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    </div>changing</button>
+  <div class="g-cont">
+    <div class="replace"></div>
+    <div class="replace"></div>
+    <div class="replace"></div>
+    <div class="replace"></div>
+    <div class="replace"></div>
+    <div class="replace"></div>
+    <div class="replace"></div>
+    <div class="replace"></div>
+  </div>
+</div>
 
 
 
@@ -1482,28 +1511,17 @@ window.addEventListener("load", function() {
 <div class= ""  >
 
 
-<form>
-  <div class="form-group d-flex justify-content-center ">
-    <label for="upload">upload JSON</label>
-    <input type="file" class="form-control-file btn-sm btn" value= "load" id="upload" >
-
-  </div>
 
 
 
-</form>
 
-
-	 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()" >save json</button>
-	  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">export document</button>
-	  <button id="test" class="d-none btn-sm btn-secondary" onclick = "test()">debug test</button>
 	 
 	 
 
 	<br>
 	 <div class="btn-group" >
-<button  type="button" class="btn btn-previous btn-sm " value= "previous" style= "width:10vh;" onclick = "nav_previous()">< previous</button>
-<button  type="button" class="btn btn-next btn-sm " value= "next" style= "width:10vh;" onclick= "nav_next()">next ></button>
+<button btn type="button" class="btn-primary  btn-sm " value= "previous" style= "" onclick = "nav_previous()">←previous</button>
+<button  type="button" class="btn-primary btn-sm " value= "next" style= "" onclick= "nav_next()">next→</button>
  <br>
 </div>
 
@@ -1513,8 +1531,21 @@ window.addEventListener("load", function() {
 	  
 	  <div class="progress"  >
   <div class="progress-bar progress-bar-striped" role="progressbar"  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id= "p-bar"> Progress </div>
+  
 	</div>
-	
+	<form>
+  <div class="form-group d-flex justify-content-center ">
+    <label for="upload">upload JSON</label>
+    <input type="file" class="form-control-file btn-sm btn" value= "load" id="upload" >
+
+  </div>
+
+
+
+</form>
+		 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()" >save json</button>
+	  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">export document</button>
+	  <button id="test" class="d-none btn-sm btn-secondary" onclick = "test()">debug test</button>
 </div>
 	
 
