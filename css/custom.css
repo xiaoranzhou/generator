@@ -54,7 +54,7 @@ padding:0;
     border-color: #ffecb3
 }
 
-.btn-primary:focus,
+.btn-primary:focus,.tour-active-element,
 .btn-primary.focus {
     box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
 }
@@ -93,7 +93,7 @@ padding:0;
     border-color: #7cc
 }
 
-.btn-outline-primary:focus,
+.btn-outline-primary:focus, 
 .btn-outline-primary.focus {
     box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
 }
