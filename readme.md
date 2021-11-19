@@ -1,12 +1,13 @@
 ## Introduction
 "Data management plan generator" can create a data management plan automatically. 
 This tool is purely web-based, front end and written in javascript. 
-Currently both the input and output are .odt files. 
+
+Input files can be 
 
 To try this tool, you can go to [this link](http://xrzhou.com/generator) or [another link](https://nfdi4plants.de/plan-generator/)
 
-You can also try an edited document through saved answers in JSON format. [try this link for some answered "replace" questions](https://nfdi4plants.de/plan-generator/?https://raw.githubusercontent.com/nfdi4plants/plan-generator/main/saved_json/test_find.json)
-[try this link for answers include the first checkbox](https://nfdi4plants.de/plan-generator/?https://raw.githubusercontent.com/nfdi4plants/plan-generator/main/saved_json/test_half.json)
+You can also try an edited document through saved answers in JSON format. [try this link](https://nfdi4plants.de/plan-generator/?https://raw.githubusercontent.com/nfdi4plants/plan-generator/main/saved_json/exampl2.json)
+
 
 ### Features:
 the generator can:
