@@ -418,10 +418,11 @@
 
 			function checkbox(options) {
 
-				//TODO some behaviors can still cause bugs
-				//gui.CaretManager(window,"localuser").destroy;
+				
+				// remove ranges, very important. took me long time to find this function
 				const selection = window.getSelection();
 				selection.removeAllRanges();
+				// all ojects which first class name is the option name
 				const class_name = Object.keys(options)[0];
 				console.log(class_name);
 				const checked = options[class_name]["checked"];
@@ -432,6 +433,7 @@
 					let check_box_item = checked[i];
 					//console.log(check_box );
 					let name = check_box_item.split('_')[1];
+					// here the ________ should not match anything, make sure not to use it as a real placeholder
 					let match_name = "_________";
 					try {
 						match_name = prefix.concat(name.toUpperCase());
@@ -445,7 +447,7 @@
 
 						let ns = window.find(match_name, aWrapAround = 1);
 						while (ns) {
-
+							// this is very tedious but necessary, because the find and replace of multiple character words in DOI is not trivial.  
 							console.log("found");
 							let left_range = window.getSelection().getRangeAt(0).cloneRange();
 							let right_range = window.getSelection().getRangeAt(0).cloneRange();
@@ -527,6 +529,7 @@
 
 								match_mod(if_range);
 								selection.removeAllRanges();
+								// to match different conditions
 							} else if (if_cha == "f") {
 								if (right_cha == "|") {
 									window.find(" ");
@@ -592,6 +595,7 @@
 				}
 
 				for (let i = 0; i < unchecked.length; i++) {
+				// here starts the unchecked box, it is basically as same as the checked options. It should be warped in a more general function, so no copy-paste is used. but I am too lazy to warp it and it only shows twice, so I think it is OK.
 					let check_box_item = unchecked[i];
 					//console.log(check_box );
 					let name = check_box_item.split('_')[1];
