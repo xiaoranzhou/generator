@@ -53,7 +53,7 @@
 			
 			var steps = [{
 					title: "Welcome to our DMP Generator",
-					content: '<p>Let\'s generate a Data Management Plan by following this tutorial <br> <a href="https://github.com/nfdi4plants/plan-generator/wiki/Home--%F0%9F%A4%96" >If you have more questions, you can also check our wiki</a></p>'
+					content: '<p>Let\'s generate a Data Management Plan by following this tutorial </p>'
 				}, {
 					id: "interface",
 					content: "<p>You can answer questions here</p>"
@@ -80,7 +80,7 @@
 					content: "<p>and then upload it to continue your generation</p>"
 				}, {
 					id: "odt_save",
-					content: "<p>after answering all questions, you can export your document</p>"
+					content: '<p>after answering all questions, you can export your document<br> <a href="https://github.com/nfdi4plants/plan-generator/wiki/Home--%F0%9F%A4%96" >If you have more questions, please check our wiki</a></p>'
 				}
 			];
 			var tour = new Tour(steps);
@@ -345,13 +345,8 @@
 				checkbox(singleOption);
 
 			}
-			function go_bookmark() {
-				let goto_node = window.getSelection().anchorNode;
-				goto_node.scrollIntoView({
-					behavior: 'smooth'
-				});
-			}
 
+			// go to the high lighted lockation
 			function go_to(element1) {
 				const warning = element1.value;
 				console.log("the warning text tag is " + warning);
@@ -1489,7 +1484,7 @@
 			 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()" >save json</button>
 		  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">export document</button>
 		  <br>
-		  <a href="https://github.com/nfdi4plants/plan-generator/wiki/Home--%F0%9F%A4%96" >If you have questions, you can go to wiki</a>
+		  <a href="https://github.com/nfdi4plants/plan-generator/wiki/Home--%F0%9F%A4%96" >Please check our wiki, if you have more questions</a>
 		  <button id="test" class="d-none btn-sm btn-secondary" onclick = "test()">debug test</button>
 	</div>
 		
