@@ -75,7 +75,7 @@ body.tour-active-element {
   padding: 4px;
   margin: 0 2px;
   background: #ced4da;
-  font-size: 1px;
+  font-size: 10px;
   border-radius: 4px;
 }
 
@@ -98,3 +98,4 @@ body.tour-active-element {
   float: right;
 }
 /*# sourceMappingURL=bs5-intro-tour.css.map */
+
