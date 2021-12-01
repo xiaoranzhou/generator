@@ -72,8 +72,9 @@ Tour.prototype.createTabLinks = function() {
     var html = '<ul class="tour-tab-links">';
 
     for (var i = 0; i < this.steps.length; i++) {
+		const x = i+1;
         var cssClass = i === 0 ? "active" : "";
-        html += '<li><a role="button" class="' + cssClass + '" data-tour-step="' + i + '">&nbsp;</a></li>';
+        html += '<li><a role="button" class="' + cssClass + '" data-tour-step="' + i + '">' + x +' </a></li>';
     }
 
     html += '</ul>';
