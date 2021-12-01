@@ -55,7 +55,8 @@
 			
 			var steps = [{
 					title: "Welcome to our DMP Generator",
-					content: '<h1> currently there is a bug in undo, trying to fix it by now </h1><p>Let\'s generate a Data Management Plan by following this tutorial </p>'
+					content: '<p>Let\'s generate a Data Management Plan by following this tutorial </p>'
+					//<h1> currently there is a bug in undo, trying to fix it by now </h1>
 				}, {
 					id: "interface",
 					content: "<p>You can answer questions here</p>"
@@ -94,6 +95,7 @@
 
 			function startEditing() {}
 			function endEditing() {}
+			function createSession() {}
 			/*jslint emptyblock: false*/
 
 			/**
@@ -246,17 +248,21 @@
 				}
 			}
 			Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
-			function reload_all() {
+			async function reload_all() {
+			
 				//Wodo.destroy();
 				const selection = window.getSelection();
 				selection.removeAllRanges();
-				let wait_editor = startEditing();
-
-				editor.closeDocument(console.log);
-				editor.openDocumentFromUrl("DMP1.odt", startEditing);
-
-				setTimeout(function() { reload_answers(); }, 1000);
 				
+				
+
+				const close = await editor.closeDocument(console.log);
+				const open = await editor.openDocumentFromUrl("DMP1.odt", startEditing);
+
+				const reload = await setTimeout(function() { reload_answers(); }, 1500);
+				close;
+				open;
+				reload;
 				
 		
 				// do things after the DOM loads partially
@@ -807,7 +813,7 @@
 			 * @param {string} after - the formal text represented by the keyword.
 			 */
 			function find_replace(option) {
-				editor.setDocumentModified(true);
+				
 
 
 				const selection = window.getSelection();
@@ -876,7 +882,7 @@
 						range.pasteHTML(after);
 					}
 				}
-
+				editor.setDocumentModified(true);
 			}
 			window.onload = function () {}
 			var x = 0;
