@@ -4,7 +4,7 @@ This tool is purely web-based, front end and written in javascript.
 
 Input files can be 
 
-To try this tool, you can go to [this link](http://xrzhou.com/generator) or [another link](https://nfdi4plants.de/plan-generator/)
+To try this tool, you can go to [this link](https://nfdi4plants.de/plan-generator/)
 
 You can also try an edited document through saved answers in JSON format. [try this link](https://nfdi4plants.de/plan-generator/?https://raw.githubusercontent.com/nfdi4plants/plan-generator/main/saved_json/example2.json)
 
