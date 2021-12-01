@@ -278,7 +278,7 @@
 			}
 
 			function undo(this_element) {
-				editor.setDocumentModified(true);
+				
 				const selection = window.getSelection();
 				selection.removeAllRanges();
 				const previous_element = this_element.previousElementSibling;
@@ -304,7 +304,7 @@
 
 			function reload_answers() {
 				console.log("answers is reloading");
-				editor.setDocumentModified(true);
+				
 				for (let answers in saved_a["replace"]) {
 					let singleOption = {};
 					singleOption[answers] = saved_a["replace"][answers]
