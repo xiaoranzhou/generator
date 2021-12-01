@@ -34,10 +34,10 @@ body.tour-active-element {
 
 .popover-tour .tour-exit:before {
   font-family: "Arial";
-  content: "X";
+  content: "Close X";
   position: absolute;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 20px;
   top: 6px;
   right: 10px;
   padding: 3px;
