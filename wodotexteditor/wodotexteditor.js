@@ -583,7 +583,7 @@ window.Wodo = window.Wodo || (function () {
          * @return {undefined}
          */
         this.setDocumentModified = function (modified) {
-            runtime.assert(editorSession, "editorSession should exist here.");
+            //runtime.assert(editorSession, "editorSession should exist here.");
 
             if (undoRedoEnabled) {
                 editorSession.sessionController.getUndoManager().setDocumentModified(modified);
