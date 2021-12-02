@@ -256,13 +256,15 @@
 				selection.removeAllRanges();
 				
 				
-
+				if (typeof session  !== 'undefined' ){
 				const close = await editor.closeDocument(console.log);
+				}
+				
 				const open = await editor.openDocumentFromUrl("DMP1.odt", startEditing);
 
 				const reload = await setTimeout(function() { reload_answers(); }, 1500);
-				close;
-				open;
+				
+				
 				reload;
 				
 		
