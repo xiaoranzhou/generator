@@ -249,23 +249,30 @@
 				}
 			}
 			Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
-			async function reload_all() {
+			function reload_all() {
 			
 				//Wodo.destroy();
 				const selection = window.getSelection();
 				selection.removeAllRanges();
 				
-				
+				async function wait_load() {
 				if (typeof session  !== 'undefined' ){
-				const close = await editor.closeDocument(console.log);
+				const close_a = await new Promise((resolve) => setTimeout(() => editor.closeDocument(console.log))) ;
+			
+				}
+				const open_a = await new Promise((resolve) => setTimeout(() => editor.openDocumentFromUrl("DMP1.odt", startEditing))) ;
+				
+				
+				
 				}
 				
-				const open = await editor.openDocumentFromUrl("DMP1.odt", startEditing);
 
-				const reload = await setTimeout(function() { reload_answers(); }, 1500);
+				//const reload = await setTimeout(function() { reload_answers(); }, 0);
+				//const reload = await reload_answers();
 				
 				
-				reload;
+				wait_load().then( setTimeout(() => reload_answers(),1500 ));
+				
 				
 		
 				// do things after the DOM loads partially
@@ -279,6 +286,7 @@
 
 				const after = child.previousElementSibling.value;
 				console.log(before, after);
+				undo(child.nextElementSibling);
 				saved_a["replace"][before] = after;
 				let singleOption = {};
 				singleOption[before] = after;
@@ -333,6 +341,7 @@
 			}
 
 			function getOption(this_element) {
+				undo(this_element.nextElementSibling);
 				const class_name = this_element.classList[0];
 				console.log("class name for question is " + class_name);
 				const checked = document.querySelectorAll(`.${class_name}:checked`);
@@ -1063,7 +1072,7 @@
 				<input class="btn btn-primary btn-sm" type="button" id="project_name_submit"
 					   value="replace"
 					   onclick="replace(this)">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo" id="project_name_undo"
 					   onclick="undo(this);">
 	  
@@ -1080,7 +1089,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  
@@ -1095,7 +1104,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  
@@ -1111,7 +1120,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)">
-				<input class="btn btn-secondary btn-sm" type="button"
+				<input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  
@@ -1175,7 +1184,7 @@
 		<input class="q_1st btn btn-primary form-check-inline btn-sm" type="button" id="form-check-input"
 					   value="submit "
 					   onclick="getOption(this)" > 
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 
@@ -1229,7 +1238,7 @@
 				  <input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 				   </form>
@@ -1248,7 +1257,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  
@@ -1268,7 +1277,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)" data-bs-toggle="tooltip" data-bs-placement="top" title="submit the checkbox first">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  
@@ -1369,7 +1378,7 @@
 	<input class="q_2nd btn btn-primary btn-sm" type="button" id="check_box1"
 					   value="submit data type"
 					   onclick="getOption(this)" class=> 
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  </div>
@@ -1385,7 +1394,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 					   <br>
@@ -1398,7 +1407,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="replace"
 					   onclick="replace(this)">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  
@@ -1461,7 +1470,7 @@
 				<input class="btn btn-primary btn-sm" type="button"
 					   value="press if you don't need visualization"
 					   onclick="replace(this)">
-					   <input class="btn btn-secondary btn-sm" type="button"
+					   <input class="btn btn-secondary btn-sm d-none" type="button"
 					   value="undo"
 					   onclick="undo(this);">
 	  
