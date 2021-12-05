@@ -247,8 +247,12 @@
 					loadedFilename = docUrl;
 					editor.openDocumentFromUrl(docUrl, startEditing);
 				}
+				//hide loading animationa after loading
+			loading_animation = document.getElementById("loading");
+			loading_animation.classList.add("d-none");
 			}
 			Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
+			
 			function reload_all() {
 			
 				//Wodo.destroy();
@@ -257,10 +261,12 @@
 				
 				async function wait_load() {
 				if (typeof session  !== 'undefined' ){
-				const close_a = await new Promise((resolve) => setTimeout(() => editor.closeDocument(console.log))) ;
+				const close = editor.closeDocument(console.log);
+				const close_a = await new Promise((resolve) => setTimeout(() => close )) ;
 			
 				}
-				const open_a = await new Promise((resolve) => setTimeout(() => editor.openDocumentFromUrl("DMP1.odt", startEditing))) ;
+				const open = editor.openDocumentFromUrl("DMP1.odt", startEditing) ;
+				const open_a = await new Promise((resolve) => setTimeout(() =>open )) ;
 				
 				
 				
