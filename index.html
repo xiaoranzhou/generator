@@ -250,8 +250,17 @@
 				//hide loading animationa after loading
 			loading_animation = document.getElementById("loading");
 			loading_animation.classList.add("d-none");
+			fetch("./saved_json/example.json")
+					.then(response => response.json())
+					.then(json => {
+						saved_a = json;})
+						
+
+					
 			}
-			Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
+			async function wait_init() {
+			await Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
+			}
 			
 			function reload_all() {
 			
@@ -265,7 +274,7 @@
 				const close_a = await new Promise((resolve) => setTimeout(() => close )) ;
 			
 				}
-				const open = editor.openDocumentFromUrl("DMP1.odt", startEditing) ;
+				const open = editor.openDocumentFromUrl("./DMP1.odt", startEditing) ;
 				const open_a = await new Promise((resolve) => setTimeout(() =>open )) ;
 				
 				
@@ -961,7 +970,9 @@
 				console.log("progress bar value is" + x);
 
 			}
-
+			
+			
+			
 			window.addEventListener("load", function () {
 				tour.show();
 
@@ -973,14 +984,15 @@
 					.then(response => response.json())
 					.then(json => {
 						saved_a = json;
-						reload_all();
-
+						
 						//setTimeout(() => reload_all(),1000);
 
 					})
+					
+
 
 				}
-
+				
 				const uploadJson = document.getElementById("upload");
 				uploadJson.addEventListener("change", reloadJson, false);
 
@@ -1005,6 +1017,7 @@
 
 					}
 				});
+			wait_init().then(setTimeout( () => {reload_answers()},2500 ));
 			});
 
 
