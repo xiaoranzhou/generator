@@ -192,7 +192,7 @@
 				form.click();
 			}
 
-			function save() {
+			function save(filename = "DMPs.odt") {
 				function saveByteArrayLocally(err, data) {
 					if (err) {
 						alert(err);
@@ -200,7 +200,7 @@
 					}
 					// TODO: odfcontainer should have a property mimetype
 					var mimetype = "application/vnd.oasis.opendocument.text",
-					filename = loadedFilename || "DMPs.odt",
+					//filename = loadedFilename || "DMPs.odt",
 					blob = new Blob([data.buffer], {
 						type: mimetype
 					});
@@ -212,7 +212,18 @@
 				
 				editor.getDocumentAsByteArray(saveByteArrayLocally);
 			}
+			function guide_save() {
+			 reload_all("./guide.odt");
+			
+			setTimeout(() => {save("guide.odt")} ,1000  ); 
 
+			}
+			function proposal_save() {
+			 reload_all("./proposal.odt");
+			
+			setTimeout(() => {save("proposal.odt")} ,1000  ); 
+
+			}
 			editorOptions = {
 				loadCallback: load,
 				saveCallback: save,
@@ -289,7 +300,7 @@
 
 			
 						
-			function reload_all() {
+			function reload_all(path) {
 								
 				
 
@@ -307,7 +318,7 @@
 				
 				//const open_a = await new Promise((resolve) => setTimeout(() =>open )) ;
 				
-				editor.openDocumentFromUrl("./DMP1.odt", startEditing);
+				editor.openDocumentFromUrl(path, startEditing);
 				wait_reload(reload_answers);
 				
 				
@@ -364,7 +375,7 @@
 				}
 
 				console.log("json is " + saved_a);
-				reload_all();
+				reload_all( "./DMP1.odt");
 			}
 
 			function reload_answers() {
@@ -1045,7 +1056,7 @@
 
 					//saved_a = JSON.parse(uploadJson.files[0]);
 					console.log(JSON.stringify(saved_a));
-					reload_all();
+					reload_all( "./DMP1.odt");
 				}
 				document.getElementById("nav-tab").addEventListener("click", function (e) {
 					const tgt = e.target;
@@ -1594,6 +1605,8 @@
 	</form>
 			 <button id="json_save" class="btn-sm btn-secondary" onclick = "save_json()" >save json</button>
 		  <button id="odt_save" class="btn-sm btn-secondary" onclick = "save()">export document</button>
+		  <button id="guide_save" class=" btn-sm btn-secondary" onclick = "guide_save()">save practice guide</button>
+		  <button id="proposal_save" class=" btn-sm btn-secondary" onclick = "proposal_save()">save proposal</button>
 		  <br>
 		  <a href="https://github.com/nfdi4plants/plan-generator/wiki/Home--%F0%9F%A4%96" >Please check our wiki, if you have more questions</a>
 		  <button id="test" class="d-none btn-sm btn-secondary" onclick = "test()">debug test</button>
