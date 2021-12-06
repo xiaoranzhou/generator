@@ -208,7 +208,8 @@
 					// TODO: hm, saveAs could fail or be cancelled
 					editor.setDocumentModified(false);
 				}
-
+				issueWarning();
+				
 				editor.getDocumentAsByteArray(saveByteArrayLocally);
 			}
 
@@ -258,39 +259,71 @@
 
 					
 			}
+			
 			async function wait_init() {
 			await Wodo.createTextEditor('editorContainer', editorOptions, onEditorCreated);
 			}
 			
-			function reload_all() {
 			
+			function wait_reload(callback) {
+			
+			// identify an element to observe
+			const elementToObserve = document.querySelector("#editorContainer");
+
+			// create a new instance of `MutationObserver` named `observer`,
+			// passing it a callback function
+			const observer = new MutationObserver(function() {
+				console.log('callback that runs when observer is triggered');
+			});
+
+			// call `observe()` on that MutationObserver instance,
+			// passing it the element to observe, and the options object
+			
+			observer.observe(elementToObserve, {subtree: true, childList: true});
+			
+			setTimeout( ()=> {callback()}, 800  );
+			observer.disconnect();
+			
+			}
+			
+
+			
+						
+			function reload_all() {
+								
+				
+
 				//Wodo.destroy();
 				const selection = window.getSelection();
 				selection.removeAllRanges();
 				
-				async function wait_load() {
+
 				if (typeof session  !== 'undefined' ){
-				const close = editor.closeDocument(console.log);
-				const close_a = await new Promise((resolve) => setTimeout(() => close )) ;
+				editor.closeDocument(console.log);
+		
 			
 				}
-				const open = editor.openDocumentFromUrl("./DMP1.odt", startEditing) ;
-				const open_a = await new Promise((resolve) => setTimeout(() =>open )) ;
 				
 				
+				//const open_a = await new Promise((resolve) => setTimeout(() =>open )) ;
 				
-				}
+				editor.openDocumentFromUrl("./DMP1.odt", startEditing);
+				wait_reload(reload_answers);
+				
+				
 				
 
 				//const reload = await setTimeout(function() { reload_answers(); }, 0);
 				//const reload = await reload_answers();
 				
 				
-				wait_load().then( setTimeout(() => reload_answers(),1500 ));
 				
+				//wait_load().then( setTimeout(() => reload_answers(),0 ));
 				
 		
 				// do things after the DOM loads partially
+				
+				
 
 
 			}
@@ -335,7 +368,15 @@
 			}
 
 			function reload_answers() {
+					
+
+				
+				
 				console.log("answers is reloading");
+				
+
+				
+				
 				
 				for (let answers in saved_a["replace"]) {
 					let singleOption = {};
@@ -353,6 +394,7 @@
 					checkbox(singleOption);
 				}
 				console.log("answer reload is finished");
+				
 			}
 
 			function getOption(this_element) {
@@ -1017,7 +1059,16 @@
 
 					}
 				});
-			wait_init().then(setTimeout( () => {reload_answers()},2500 ));
+				
+
+				
+			wait_init().then(setTimeout( () => {wait_reload(reload_answers)},1000));
+			
+			
+			
+			
+			
+			
 			});
 
 
@@ -1078,6 +1129,9 @@
 	  </div>
 	</nav>
 	<div class="tab-content  h6" id="nav-tabContent" >
+		<div id= "endText">
+
+	</div>
 	  <div class="tab-pane fade show active " id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab test">
 	  <p >1.1 Give the project name or acronym to be used:</p>
 	  
@@ -1498,9 +1552,7 @@
 
 	<br>
 
-	<div id= "endText">
 
-	</div>
 	</div>
 	</div>	
 	<div class ="row card text-center " style="height:18vh;position: absolute;
