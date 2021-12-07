@@ -54,7 +54,8 @@
 			}
 			/*============== tutorial ==============*/
 			
-			var steps = [{
+			var steps = [
+			{
 					title: "Welcome to our DMP Generator",
 					content: '<p>Let\'s generate a Data Management Plan by following this tutorial </p>'
 					//<h1> currently there is a bug in undo, trying to fix it by now </h1>
@@ -84,7 +85,13 @@
 					content: "<p>and then upload it to continue your generation</p>"
 				}, {
 					id: "odt_save",
-					content: '<p>after answering all questions, you can export your document<br> <a href="https://github.com/nfdi4plants/plan-generator/wiki/Home--%F0%9F%A4%96" >If you have more questions, please check our wiki</a></p>'
+					content: '<p>after answering all questions, you can export your document<br>' 
+				}, {
+					id: "proposal_save",
+					content: '<p>beside the current document, a short proposal can also be downloaded. To go back to the main document, you can simply click replace.<br>' 
+				}, {
+					id: "guide_save",
+					content: '<p> you can also download a practice guide. You can follow this guide to make sure that your data is well managed. To go back to the main document, you can simply click replace.<br> <a href="https://github.com/nfdi4plants/plan-generator/wiki/Home--%F0%9F%A4%96" >If you have more questions, please check our wiki</a></p>'
 				}
 			];
 			var tour = new Tour(steps);
